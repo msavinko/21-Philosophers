@@ -8,6 +8,7 @@
 #include <unistd.h>
 #include <sys/time.h> //library for gettimeofday
 
+//typedef pthread_mutex_t t_mutex;
 
 typedef struct s_philo
 {
@@ -17,7 +18,15 @@ typedef struct s_philo
 	int	sleep_time;
 	int	quant_eat;
 	int	num_forks;
+	pthread_mutex_t *p_mutex;
+	pthread_mutex_t *left_mutex;
+	pthread_mutex_t *right_mutex;
+	struct timeval last_eat;
+	int	*num;
+
 }				t_philo;
+
+
 
 int	ph_atoi(const char *str);
 void	init_philo(t_philo *philo, char** argv);
@@ -37,10 +46,10 @@ void	init_philo(t_philo *philo, char** argv);
 //если поток был отсоединен, то его уже нельзя джоинить и наоборот
 //нельзя дважды вызывать детач от одного и того же потока.
 
-// STOP VIDEO ON 24.00
+// STOP VIDEO ON 1.24
 
 
-//pthread_mutex_init
-//pthread_mutex_destroy
-//pthread_mutes_lock
-//pthread_mutex_unlock
+//pthread_mutex_init -- инициализация мьютекса
+//pthread_mutex_lock -- заблокировать мьютекс
+//pthread_mutex_unlock -- разблокировать мьютекс
+//pthread_mutex_destroy -- 

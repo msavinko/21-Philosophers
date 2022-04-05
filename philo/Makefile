@@ -5,7 +5,7 @@ SRCS_PH	=	philo.c philo_utils.c
 OBJS_PH		=	$(SRCS_PH:%.c=%.o)
 
 CC			=	cc
-CFLAGS		=	-Wall -Wextra -Werror
+CFLAGS		=	-Wall -Wextra -Werror -fsanitize=thread
 RM			=	rm -f
 
 .PHONY		:	all clean fclean re

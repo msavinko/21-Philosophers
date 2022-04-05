@@ -2,24 +2,50 @@
 
 void	*my_thread_func(void *data)
 {
-	printf("thread1 wiht num: %d\n", (int)data);
-	return ((void *)528);
+	t_philo *philo = data;
+	pthread_mutex_lock(philo->p_mutex);
+	while (*(philo->num) < 10)
+	{	
+		*(philo->num)++;
+		printf("this is here: %d", *(philo->num));
+		pthread_mutex_unlock(philo->p_mutex);
+		pthread_mutex_lock(philo->p_mutex);
+		}
+	pthread_mutex_unlock(philo->p_mutex);
+//	printf("thread1 wiht num: %d\n", (int)data);
+	return (0);
 }
 
 void	go_to_threads(t_philo *philo)
 {
-	pthread_t id;
 	void *returned;
-
-	printf("\nphilo %d\n", philo->num_philo);
-	pthread_create(&id, 0, my_thread_func, (void *)11);
+	int	tmp = 0;
+	pthread_t id;
+	pthread_mutex_t my_mutex;
+	struct data;
+	philo->p_mutex = &my_mutex;
+	*(philo->num) = tmp;
 	
+	pthread_mutex_init(philo->p_mutex, 0);
+	printf("\nphilo %d\n", philo->num_philo);
+	pthread_create(&id, 0, my_thread_func, &philo);
+
+	pthread_mutex_lock(philo->p_mutex);
+
+	while (tmp < 10)
+		{//usleep(1);
+			printf("tmp: %d\n", tmp);
+			pthread_mutex_unlock(philo->p_mutex);
+			pthread_mutex_lock(philo->p_mutex);
+		}
+	pthread_mutex_unlock(philo->p_mutex);
+
 	pthread_join(id, &returned);
 	// OR 
-	pthread_detach(id);
+	//pthread_detach(id);
 	
-	printf("\n\n thread id %d and returned %d\n\n", 
-	(int)id, (int)returned);
+	// printf("\n\n thread id %d and returned %d\n\n", 
+	// (int)id, (int)returned);
 	// sleep(1);
 }
 
