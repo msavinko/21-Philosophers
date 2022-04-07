@@ -6,7 +6,7 @@
 /*   By: marlean <marlean@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/07 10:47:47 by marlean           #+#    #+#             */
-/*   Updated: 2022/04/07 16:57:42 by marlean          ###   ########.fr       */
+/*   Updated: 2022/04/07 16:59:55 by marlean          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,4 +69,5 @@ int	main(int argc, char **argv)
 	return (0);
 }
 
-//book 30.2.1
+//book 30.2.1 (627-686), 652 API
+//stolyarov 7chapter (245-312)
