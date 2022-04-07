@@ -3,15 +3,18 @@
 void	*my_thread_func(void *data)
 {
 	t_philo *philo = data;
+	int n = *(philo->num);
 	pthread_mutex_lock(philo->p_mutex);
-	while (*(philo->num) < 10)
+	while (n < 10)
 	{	
-		*(philo->num)++;
-		printf("this is here: %d", *(philo->num));
+		n++;
+		
 		pthread_mutex_unlock(philo->p_mutex);
 		pthread_mutex_lock(philo->p_mutex);
 		}
+	printf("this is here: %d", *(philo->num));
 	pthread_mutex_unlock(philo->p_mutex);
+	*(philo->num) = n;
 //	printf("thread1 wiht num: %d\n", (int)data);
 	return (0);
 }
@@ -62,16 +65,9 @@ void	init_philo(t_philo *philo, char** argv)
 	if (argv[5])
 	{
 		philo->quant_eat = ph_atoi(argv[5]);
-	//	printf("quantity of eat: %d\n", philo->quant_eat);
 	}
 	else 
 		philo->quant_eat = -1;
-	
-	// printf("num of philo: %d\n", philo->num_philo);
-	// printf("time to die: %d\n", philo->die_time);
-	// printf("time to eat: %d\n", philo->eat_time);
-	// printf("time to sleep: %d\n", philo->sleep_time);
-	// printf("forks: %d\n", philo->num_forks);
 }
 
 int	main(int argc, char **argv)
@@ -93,5 +89,3 @@ int	main(int argc, char **argv)
 
 	return (0);
 }
-
-//program must not have data races.

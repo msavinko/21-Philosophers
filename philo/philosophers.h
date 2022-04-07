@@ -29,8 +29,10 @@ typedef struct s_philo
 
 
 int	ph_atoi(const char *str);
-void	init_philo(t_philo *philo, char** argv);
 
+void	*my_thread_func(void *data);
+void	go_to_threads(t_philo *philo);
+void	init_philo(t_philo *philo, char** argv);
 
 
 #endif
