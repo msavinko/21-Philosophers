@@ -1,59 +1,36 @@
-#include "philosophers.h"
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   philo.c                                            :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: marlean <marlean@student.42.fr>            +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2022/04/07 10:47:47 by marlean           #+#    #+#             */
+/*   Updated: 2022/04/07 13:32:33 by marlean          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
+#include "philo.h"
+
 
 void	*my_thread_func(void *data)
 {
-	t_philo *philo = data;
-	int n = *(philo->num);
-	pthread_mutex_lock(philo->p_mutex);
-	while (n < 10)
-	{	
-		n++;
-		
-		pthread_mutex_unlock(philo->p_mutex);
-		pthread_mutex_lock(philo->p_mutex);
-		}
-	printf("this is here: %d", *(philo->num));
-	pthread_mutex_unlock(philo->p_mutex);
-	*(philo->num) = n;
-//	printf("thread1 wiht num: %d\n", (int)data);
+	t_data *philo;
+	philo = (t_data *)data;
+	pthread_mutex_lock(philo->l_mutex);
+
+		printf("philo in my created thread: %d\n", philo->num_philo);
+	pthread_mutex_unlock(philo->l_mutex);
 	return (0);
 }
 
-void	go_to_threads(t_philo *philo)
+void	init_philo(t_data *philo, char** argv)
 {
-	void *returned;
-	int	tmp = 0;
-	pthread_t id;
-	pthread_mutex_t my_mutex;
-	struct data;
-	philo->p_mutex = &my_mutex;
-	*(philo->num) = tmp;
-	
-	pthread_mutex_init(philo->p_mutex, 0);
-	printf("\nphilo %d\n", philo->num_philo);
-	pthread_create(&id, 0, my_thread_func, &philo);
-
-	pthread_mutex_lock(philo->p_mutex);
-
-	while (tmp < 10)
-		{//usleep(1);
-			printf("tmp: %d\n", tmp);
-			pthread_mutex_unlock(philo->p_mutex);
-			pthread_mutex_lock(philo->p_mutex);
-		}
-	pthread_mutex_unlock(philo->p_mutex);
-
-	pthread_join(id, &returned);
-	// OR 
-	//pthread_detach(id);
-	
-	// printf("\n\n thread id %d and returned %d\n\n", 
-	// (int)id, (int)returned);
-	// sleep(1);
-}
-
-void	init_philo(t_philo *philo, char** argv)
-{
+	philo->l_mutex = malloc(sizeof(pthread_mutex_t));
+	if (!philo->l_mutex)
+		return ;
+	if (pthread_mutex_init(philo->l_mutex, NULL) != 0)
+		return ;
 	philo->num_philo = ph_atoi(argv[1]);
 	if (philo->num_philo % 2 == 0)
 		philo->num_forks = philo->num_philo;
@@ -63,29 +40,27 @@ void	init_philo(t_philo *philo, char** argv)
 	philo->eat_time = ph_atoi(argv[3]);
 	philo->sleep_time = ph_atoi(argv[4]);
 	if (argv[5])
-	{
 		philo->quant_eat = ph_atoi(argv[5]);
-	}
-	else 
-		philo->quant_eat = -1;
 }
 
 int	main(int argc, char **argv)
 {
-	t_philo philo;
-//	struct timeval current_time;
+	t_data *philo;
+	philo = malloc(sizeof(t_data));
+	if (!philo)
+		return (0);
 	if (argc != 5 && argc != 6)
 		return (0);
-	init_philo(&philo, argv);
-	if (philo.num_philo <= 0 || philo.die_time <= 0 ||
-		philo.eat_time <= 0 || philo.sleep_time <= 0)
-		printf("ERROR ");
-	
-	// gettimeofday(&current_time, NULL);
-	// printf("seconds : %ld\nmicro seconds : %d",
-    // current_time.tv_sec, current_time.tv_usec);
+	init_philo(philo, argv);
 
-	go_to_threads(&philo);
-
+	// if (philo.num_philo <= 0 || philo.die_time <= 0 ||
+	// 	philo.eat_time <= 0 || philo.sleep_time <= 0)
+	// 	write(1, "ERROR", 5);
+	if (pthread_create(&philo->id, 0, my_thread_func, philo) != 0)
+		return (0);
+	if (pthread_detach(philo->id) != 0)
+		return (0);
+	free(philo->l_mutex);
+	free(philo);
 	return (0);
 }

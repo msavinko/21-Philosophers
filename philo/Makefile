@@ -1,5 +1,5 @@
-NAME_PH 	=	philosophers
-HEADER_PH	=	philosophers.h
+NAME_PH 	=	philo
+HEADER_PH	=	philo.h
 
 SRCS_PH		=	philo.c philo_utils.c
 OBJS_PH		=	$(SRCS_PH:%.c=%.o)
@@ -26,3 +26,11 @@ fclean		:	clean
 
 re			:	fclean all
 
+# 21 290 100 100
+# 50 210 100 100
+# 199 2000 600 60
+# 7 190 60 60
+# 8 130 60 60
+
+# not necessarily  
+# 5 260 100 100  
