@@ -6,7 +6,7 @@
 /*   By: marlean <marlean@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/07 10:47:47 by marlean           #+#    #+#             */
-/*   Updated: 2022/04/07 13:32:33 by marlean          ###   ########.fr       */
+/*   Updated: 2022/04/07 16:57:42 by marlean          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,10 +17,12 @@ void	*my_thread_func(void *data)
 {
 	t_data *philo;
 	philo = (t_data *)data;
-	pthread_mutex_lock(philo->l_mutex);
+	if (pthread_mutex_lock(philo->l_mutex) != 0)
+		return (0);
 
 		printf("philo in my created thread: %d\n", philo->num_philo);
-	pthread_mutex_unlock(philo->l_mutex);
+	if (pthread_mutex_unlock(philo->l_mutex) != 0)
+		return (0);
 	return (0);
 }
 
@@ -60,7 +62,11 @@ int	main(int argc, char **argv)
 		return (0);
 	if (pthread_detach(philo->id) != 0)
 		return (0);
+	// if (pthread_mutex_destroy(philo->l_mutex) != 0)
+	// 	return (0);
 	free(philo->l_mutex);
 	free(philo);
 	return (0);
 }
+
+//book 30.2.1
