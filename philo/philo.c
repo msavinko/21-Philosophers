@@ -6,7 +6,7 @@
 /*   By: marlean <marlean@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/07 10:47:47 by marlean           #+#    #+#             */
-/*   Updated: 2022/04/11 12:48:25 by marlean          ###   ########.fr       */
+/*   Updated: 2022/04/11 16:54:43 by marlean          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,60 +15,72 @@
 
 void	*philo_action(void *data)
 {
-	t_data *philo;
-	philo = (t_data *)data;
-	if (pthread_mutex_lock(philo->l_mutex) != 0)
+	t_data *tmp;
+	tmp = (t_data *)data;
+	if (pthread_mutex_lock(&tmp->print_mutex) != 0)
 		ft_error(2);
 
-		printf("philo in my created thread: %d\n", philo->num_philo);
+		printf("philo in my created thread: %d\n", tmp->num_of_philo);
 		
-	if (pthread_mutex_unlock(philo->l_mutex) != 0)
+	if (pthread_mutex_unlock(&tmp->print_mutex) != 0)
 		ft_error(2);
 	return (0);
 }
 
-void	init_philo(t_data *philo, char** argv)
+long long	my_time(void)
 {
-	philo->num_philo = ph_atoi(argv[1]);
-	philo->time_to_die = ph_atoi(argv[2]);
-	philo->time_to_eat = ph_atoi(argv[3]);
-	philo->time_to_sleep = ph_atoi(argv[4]);
+	struct timeval	tv;
+	long long		calc_time;
+
+	gettimeofday(&tv, NULL);
+	calc_time = tv.tv_sec*1000LL + tv.tv_usec/1000; // calculate milliseconds
+   // printf("timestamp milliseconds: %lld\n", calc_time);
+	return (calc_time);
+}
+
+void	init_philo(t_data *data, char** argv)
+{
+
+	data->num_of_philo = ph_atoi(argv[1]);
+	data->time_to_die = ph_atoi(argv[2]);
+	data->time_to_eat = ph_atoi(argv[3]);
+	data->time_to_sleep = ph_atoi(argv[4]);
 	if (argv[5])
-		philo->quant_eat = ph_atoi(argv[5]);
-	if (philo->num_philo % 2 == 0)
-		philo->num_forks = philo->num_philo;
-	else
-		philo->num_forks = philo->num_philo - 1;
-	philo->l_mutex = malloc(sizeof(pthread_mutex_t));
-	if (!philo->l_mutex)
-		ft_error(3);
-	if (pthread_mutex_init(philo->l_mutex, NULL) != 0)
+		data->num_of_eat = ph_atoi(argv[5]);
+	data->start_time = my_time();
+	printf("timestamp milliseconds: %lld\n", data->start_time);
+	// data->print_mutex = malloc(sizeof(pthread_mutex_t));
+	// if (!data->print_mutex)
+	// 	ft_error(3);
+
+
+	if (pthread_mutex_init(&data->print_mutex, NULL) != 0)
 		ft_error(2);
+	
 }
 
 int	main(int argc, char **argv)
 {
-	t_data *philo;
+	t_data *data;
+
+
 	if (argc != 5 && argc != 6)
 		ft_error(1);
-	philo = malloc(sizeof(t_data));
-	if (!philo)
+	data = malloc(sizeof(t_data));
+	if (!data)
 		ft_error(3);
-	init_philo(philo, argv);
-	if (pthread_create(&philo->id, 0, philo_action, philo) != 0)
+	init_philo(data, argv);
+
+
+
+
+	if (pthread_create(&data->id, 0, philo_action, data) != 0)
 		ft_error(2);
-	// if (pthread_detach(philo->id) != 0)
-	// 	ft_error(2);
-	if (pthread_join(philo->id, NULL) != 0)
+	if (pthread_join(data->id, NULL) != 0)
 		ft_error(2);
-	if (pthread_mutex_destroy(philo->l_mutex) != 0)
+	if (pthread_mutex_destroy(&data->print_mutex) != 0)
 		ft_error(2);
-	// gettimeofday(&current_time, NULL);
-	// printf("seconds : %ld\nmicro seconds : %d", current_time.tv_sec, current_time.tv_usec);
-	free(philo);
+	free(data);
 
 	return (0);
 }
-
-//book 30.2.1 (627-686), 652 API
-//stolyarov 7chapter (245-312)

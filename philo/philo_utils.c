@@ -6,7 +6,7 @@
 /*   By: marlean <marlean@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/07 10:47:58 by marlean           #+#    #+#             */
-/*   Updated: 2022/04/11 09:32:57 by marlean          ###   ########.fr       */
+/*   Updated: 2022/04/11 16:04:09 by marlean          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,27 +27,22 @@ int	ph_atoi(const char *str)
 {
 	int			i;
 	long int	res;
-	int			sign;
 
 	i = 0;
 	res = 0;
-	sign = 1;
-	while (str[i] != '\0' && (str[i] == '\t' || str[i] == '\n' || str[i] == '\v'
-			|| str[i] == '\f' || str[i] == '\r' || str[i] == ' '))
-		i++;
 	if (str[i] != '\0' && (str[i] == '+' || str[i] == '-'))
 	{
 		if (str[i] == '-')
-			sign = -1;
+			ft_error(1);
 		i++;
 	}
 	while (str[i] != '\0' && str[i] >= '0' && str[i] <= '9')
 	{
 		res = (res * 10) + (str[i++] - '0');
-		if ((res * sign) > 2147483647)
-			ft_error(1);
-		if ((res * sign) < -2147483648)
+		if ((res) > 2147483647)
 			ft_error(1);
 	}
-	return (res * sign);
+	if (res == 0)
+		ft_error(1);
+	return (res);
 }
