@@ -6,7 +6,7 @@
 /*   By: marlean <marlean@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/07 10:48:07 by marlean           #+#    #+#             */
-/*   Updated: 2022/04/11 18:27:47 by marlean          ###   ########.fr       */
+/*   Updated: 2022/04/11 20:11:54 by marlean          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,12 +31,14 @@ typedef struct s_data
 	long long	start_time;
 	pthread_mutex_t print_mutex;
 	struct s_philo	*philo;
+	pthread_t	*id;
+
 }	t_data;
 
 typedef struct s_philo
 {
 	int philo_index;
-	pthread_t	id;
+	pthread_mutex_t *forks;
 	pthread_mutex_t *right_fork;
 	pthread_mutex_t *left_fork;
 	long long	last_eat;
@@ -46,11 +48,14 @@ typedef struct s_philo
 //philo struct index_philo, left ford, right fork, сколько поели, последнее время приема пищи
 
 
-int		ph_atoi(const char *str);
-void	ft_error(int num);
+int			ph_atoi(const char *str);
+void		ft_error(int num);
+void		init_each_philo(t_data *data);
+void		init_philo(t_data *data, char **argv);
+long long	my_time(void);
 
-void	*philo_action(void *data);
-void	init_philo(t_data *philo, char** argv);
+void		*philo_action(void *data);
+void		create_philo(t_data *data);
 
 
 #endif
