@@ -6,7 +6,7 @@
 /*   By: marlean <marlean@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/07 10:48:07 by marlean           #+#    #+#             */
-/*   Updated: 2022/04/07 13:04:00 by marlean          ###   ########.fr       */
+/*   Updated: 2022/04/11 12:53:53 by marlean          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,29 +22,39 @@
 
 //typedef pthread_mutex_t t_mutex;
 
+typedef struct s_philo
+{
+	int philo_index;
+	pthread id;
+	pthread_mutex_t right_fork;
+	pthread_mutex_t left_fork;
+	int	num_of_eat
+}	t_philo;
+
 typedef struct s_data
 {
-	pthread_t	id;
-	int	num_philo;
-	int	die_time;
-	int	eat_time;
-	int	sleep_time;
-	int	quant_eat;
-	int	num_forks;
-	pthread_mutex_t *l_mutex;
+	//pthread_t	id;
+	int	num_of_philo;
+	int	time_to_die;
+	int	time_to_eat;
+	int	time_to_sleep;
+//	int	quant_eat;
+//	int	num_forks;
+	pthread_mutex_t print_mutex;
 	// pthread_mutex_t *left_mutex;
 	// pthread_mutex_t *right_mutex;
 	// struct timeval last_eat;
 	int	*num;
-
-}				t_data;
+	struct s_philo	*philo;
+}	t_data;
 
 //philo struct index_philo, left ford, right fork, сколько поели, последнее время приема пищи
 
 
 int	ph_atoi(const char *str);
+void	ft_error(int num);
 
-void	*my_thread_func(void *data);
+void	*philo_action(void *data);
 void	init_philo(t_data *philo, char** argv);
 
 
@@ -60,9 +70,6 @@ void	init_philo(t_data *philo, char** argv);
 //pthread_detach -- отсоединить поток и вернуть ресурсы главному потоку
 //если поток был отсоединен, то его уже нельзя джоинить и наоборот
 //нельзя дважды вызывать детач от одного и того же потока.
-
-// STOP VIDEO ON 1.24
-
 
 //pthread_mutex_init -- инициализация мьютекса
 //pthread_mutex_lock -- заблокировать мьютекс

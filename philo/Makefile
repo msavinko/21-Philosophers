@@ -34,3 +34,15 @@ re			:	fclean all
 
 # not necessarily  
 # 5 260 100 100  
+
+# CHECKLIST
+# DIE
+# 1 800 200 200 
+# 4 310 200 100 
+
+# DONT DIE
+# 4 410 200 200 
+# 5 800 200 200 
+# 5 800 200 200 7 
+
+# death delayed by more than 10 ms is unacceptable!!!
