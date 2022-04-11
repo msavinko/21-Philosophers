@@ -6,7 +6,7 @@
 /*   By: marlean <marlean@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/07 10:48:07 by marlean           #+#    #+#             */
-/*   Updated: 2022/04/11 16:49:38 by marlean          ###   ########.fr       */
+/*   Updated: 2022/04/11 18:27:47 by marlean          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,6 @@
 //typedef pthread_mutex_t t_mutex;
 typedef struct s_data
 {
-	pthread_t	id;
 	int	num_of_philo;
 	int	time_to_die;
 	int	time_to_eat;
@@ -37,7 +36,7 @@ typedef struct s_data
 typedef struct s_philo
 {
 	int philo_index;
-	//pthread id;
+	pthread_t	id;
 	pthread_mutex_t *right_fork;
 	pthread_mutex_t *left_fork;
 	long long	last_eat;
