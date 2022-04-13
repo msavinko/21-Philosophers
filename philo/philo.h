@@ -5,8 +5,8 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: marlean <marlean@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/04/07 10:48:07 by marlean           #+#    #+#             */
-/*   Updated: 2022/04/11 20:11:54 by marlean          ###   ########.fr       */
+/*   Created: 2022/04/13 16:59:56 by marlean           #+#    #+#             */
+/*   Updated: 2022/04/13 17:48:28 by marlean          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,60 +18,44 @@
 # include <string.h>
 # include <stdlib.h>
 # include <unistd.h>
-# include <sys/time.h> //library for gettimeofday
+# include <sys/time.h>
 
-//typedef pthread_mutex_t t_mutex;
 typedef struct s_data
 {
-	int	num_of_philo;
-	int	time_to_die;
-	int	time_to_eat;
-	int	time_to_sleep;
-	int	num_of_eat;
-	long long	start_time;
-	pthread_mutex_t print_mutex;
+	int				num_of_philo;
+	int				time_to_die;
+	int				time_to_eat;
+	int				time_to_sleep;
+	int				num_of_eat;
+	long long		start_time;
+	pthread_mutex_t	print_mutex;
 	struct s_philo	*philo;
-	pthread_t	*id;
-
+	pthread_t		*id;
+	void			*result;
 }	t_data;
 
 typedef struct s_philo
 {
-	int philo_index;
+	t_data			*data;
 	pthread_mutex_t *forks;
-	pthread_mutex_t *right_fork;
-	pthread_mutex_t *left_fork;
-	long long	last_eat;
+	int				philo_index;
+	long long		last_eat;
 }	t_philo;
 
-
-//philo struct index_philo, left ford, right fork, сколько поели, последнее время приема пищи
-
-
 int			ph_atoi(const char *str);
-void		ft_error(int num);
-void		init_each_philo(t_data *data);
-void		init_philo(t_data *data, char **argv);
+int			ft_error(int num);
+int			init_each_philo(t_data *data);
+int			init_philo(t_data *data, char **argv);
 long long	my_time(void);
 
+int			eat(t_philo *philo);
 void		*philo_action(void *data);
 void		create_philo(t_data *data);
 
-
 #endif
 
-//void *memset (void *destination, int c, size_t n);
-//memset fill first n byte in dest wiht "int c"
-
-//gettimeofday cat get the time and timezone.
-
-//pthread_create -- создает поток
-//pthread_join -- ожидает завершения потока
-//pthread_detach -- отсоединить поток и вернуть ресурсы главному потоку
-//если поток был отсоединен, то его уже нельзя джоинить и наоборот
-//нельзя дважды вызывать детач от одного и того же потока.
-
-//pthread_mutex_init -- инициализация мьютекса
-//pthread_mutex_lock -- заблокировать мьютекс
-//pthread_mutex_unlock -- разблокировать мьютекс
-//pthread_mutex_destroy -- 
+//TODO
+// correct initialize
+// create correct num of philo
+// create my usleep
+// create my free function

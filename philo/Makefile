@@ -53,3 +53,5 @@ re			:	fclean all
 # ◦ timestamp_in_ms X is sleeping
 # ◦ timestamp_in_ms X is thinking
 # ◦ timestamp_in_ms X died
+
+# valgrind ./philo 7 190 60 60 --leak-check=full
