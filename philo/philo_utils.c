@@ -6,7 +6,7 @@
 /*   By: marlean <marlean@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/07 10:47:58 by marlean           #+#    #+#             */
-/*   Updated: 2022/04/13 19:46:39 by marlean          ###   ########.fr       */
+/*   Updated: 2022/04/14 15:49:10 by marlean          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,23 @@ long long	my_time(void)
 		return (ft_error(4));
 	calc_time = tv.tv_sec * 1000LL + tv.tv_usec / 1000;
 	return (calc_time);
+}
+
+int	my_sleep(int ms)
+{
+	struct timeval	start;
+	struct timeval	now;
+	if (gettimeofday(&start, NULL) != 0)
+		return (ft_error(4));
+	if (gettimeofday(&now, NULL) != 0)
+		return (ft_error(4));
+	while((((now.tv_sec - start.tv_sec) * 1000) +
+		((now.tv_usec - start.tv_usec) / 1000)) < ms)
+	{
+		usleep(10);
+		gettimeofday(&now, NULL);
+	}
+	return (0);
 }
 
 int	ft_error(int num)
@@ -77,8 +94,8 @@ int	init_each_philo(t_data *data)
 		data->philo[i].philo_index = i;
 		data->philo[i].last_eat = my_time();
 		data->philo[i].data = data;
-		data->philo[i].l_fork = &data->forks[i];
-		data->philo[i].r_fork = &data->forks[(i + 1) % data->num_of_philo];
+		data->philo[i].r_fork = &data->forks[i];
+		data->philo[i].l_fork = &data->forks[(i + 1) % data->num_of_philo];
 		i++;
 	}
 	return (0);

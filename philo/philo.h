@@ -6,7 +6,7 @@
 /*   By: marlean <marlean@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/13 16:59:56 by marlean           #+#    #+#             */
-/*   Updated: 2022/04/13 19:19:12 by marlean          ###   ########.fr       */
+/*   Updated: 2022/04/14 15:03:10 by marlean          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,11 +44,12 @@ typedef struct s_philo
 	long long		last_eat;
 }	t_philo;
 
-int			ph_atoi(const char *str);
+long long	my_time(void);
+int			my_sleep(int ms);
 int			ft_error(int num);
+int			ph_atoi(const char *str);
 int			init_each_philo(t_data *data);
 int			init_philo(t_data *data, char **argv);
-long long	my_time(void);
 
 int			take_forks(t_philo *philo);
 void		*philo_action(void *data);
@@ -57,7 +58,7 @@ int		create_philo(t_data *data);
 #endif
 
 //TODO
-// correct initialize
-// create correct num of philo
-// create my usleep
+
+// eat
 // create my free function
+// check death
