@@ -6,7 +6,7 @@
 /*   By: marlean <marlean@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/07 10:47:58 by marlean           #+#    #+#             */
-/*   Updated: 2022/05/04 13:27:22 by marlean          ###   ########.fr       */
+/*   Updated: 2022/05/04 16:19:28 by marlean          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,22 +82,22 @@ int	init_each_philo(t_data *data)
 	int	i;
 
 	i = 0;
-	while (i < data->num_of_philo)
+	while (i <= data->num_of_philo)
 	{
 		if (pthread_mutex_init(&data->forks[i], NULL) != 0)
 			return (ft_error(2));
-		i++;
-	}
-	i = 0;
-	while (i < data->num_of_philo)
-	{
-		data->philo[i].philo_index = i;
+		data->philo[i].philo_index = i + 1;
 		data->philo[i].last_eat = my_time();
 		data->philo[i].data = data;
-		data->philo[i].r_fork = &data->forks[i];
-		data->philo[i].l_fork = &data->forks[(i + 1) % data->num_of_philo];
+		data->philo[i].last = 0;
+		data->philo[i].l_fork = &data->forks[i + 1];
+		if (i == 0)
+			data->philo[i].r_fork = &data->forks[data->num_of_philo];
+		else
+			data->philo[i].r_fork = &data->forks[i];
 		i++;
 	}
+	data->philo[i - 1].last = 1;
 	return (0);
 }
 

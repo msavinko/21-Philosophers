@@ -6,7 +6,7 @@
 /*   By: marlean <marlean@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/13 16:59:56 by marlean           #+#    #+#             */
-/*   Updated: 2022/05/04 13:28:24 by marlean          ###   ########.fr       */
+/*   Updated: 2022/05/04 16:19:05 by marlean          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,6 +42,7 @@ typedef struct s_philo
 	pthread_mutex_t	*l_fork;
 	int				philo_index;
 	long long		last_eat;
+	int				last;
 }	t_philo;
 
 long long	my_time(void);
