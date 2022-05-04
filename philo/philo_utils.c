@@ -6,7 +6,7 @@
 /*   By: marlean <marlean@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/07 10:47:58 by marlean           #+#    #+#             */
-/*   Updated: 2022/04/14 15:49:10 by marlean          ###   ########.fr       */
+/*   Updated: 2022/05/04 13:27:22 by marlean          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,18 +23,18 @@ long long	my_time(void)
 	return (calc_time);
 }
 
-int	my_sleep(int ms)
+int	my_sleep(int time)
 {
-	struct timeval	start;
 	struct timeval	now;
-	if (gettimeofday(&start, NULL) != 0)
-		return (ft_error(4));
-	if (gettimeofday(&now, NULL) != 0)
-		return (ft_error(4));
-	while((((now.tv_sec - start.tv_sec) * 1000) +
-		((now.tv_usec - start.tv_usec) / 1000)) < ms)
+	struct timeval	start;
+
+	gettimeofday(&start, NULL);
+	gettimeofday(&now, NULL);
+	usleep(time * 900);
+	while (((now.tv_sec * 1000000 + now.tv_usec)
+			- (start.tv_sec * 1000000 + start.tv_usec)) < time * 1000)
 	{
-		usleep(10);
+		usleep(100);
 		gettimeofday(&now, NULL);
 	}
 	return (0);
@@ -63,17 +63,17 @@ int	ph_atoi(const char *str)
 	if (str[i] != '\0' && (str[i] == '+' || str[i] == '-'))
 	{
 		if (str[i] == '-')
-			ft_error(1);
+			return (-1);
 		i++;
 	}
 	while (str[i] != '\0' && str[i] >= '0' && str[i] <= '9')
 	{
 		res = (res * 10) + (str[i++] - '0');
 		if ((res) > 2147483647)
-			ft_error(1);
+			return (-1);
 	}
-	if (res == 0)
-		ft_error(1);
+	if (str[i] != '\0' && (!(str[i] >= '0' && str[i] <= '9') || res == 0))
+		return (-1);
 	return (res);
 }
 
@@ -108,7 +108,14 @@ int	init_philo(t_data *data, char **argv)
 	data->time_to_eat = ph_atoi(argv[3]);
 	data->time_to_sleep = ph_atoi(argv[4]);
 	if (argv[5])
+	{
 		data->num_of_eat = ph_atoi(argv[5]);
+		if (data->num_of_eat <= 0)
+			return (ft_error(1));
+	}
+	if (data->num_of_philo <= 0 || data->time_to_die <= 0
+		|| data->time_to_eat <= 0 || data->time_to_sleep <= 0)
+		return (ft_error(1));
 	data->start_time = my_time();
 	if (pthread_mutex_init(&data->print_mutex, NULL) != 0)
 		return (ft_error(2));

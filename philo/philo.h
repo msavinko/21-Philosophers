@@ -6,7 +6,7 @@
 /*   By: marlean <marlean@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/13 16:59:56 by marlean           #+#    #+#             */
-/*   Updated: 2022/04/14 15:03:10 by marlean          ###   ########.fr       */
+/*   Updated: 2022/05/04 13:28:24 by marlean          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,20 +32,20 @@ typedef struct s_data
 	struct s_philo	*philo;
 	pthread_t		*id;
 	void			*result;
-	pthread_mutex_t *forks;
+	pthread_mutex_t	*forks;
 }	t_data;
 
 typedef struct s_philo
 {
 	t_data			*data;
-	pthread_mutex_t *r_fork;
-	pthread_mutex_t *l_fork;
+	pthread_mutex_t	*r_fork;
+	pthread_mutex_t	*l_fork;
 	int				philo_index;
 	long long		last_eat;
 }	t_philo;
 
 long long	my_time(void);
-int			my_sleep(int ms);
+int			my_sleep(int time);
 int			ft_error(int num);
 int			ph_atoi(const char *str);
 int			init_each_philo(t_data *data);
@@ -53,7 +53,7 @@ int			init_philo(t_data *data, char **argv);
 
 int			take_forks(t_philo *philo);
 void		*philo_action(void *data);
-int		create_philo(t_data *data);
+int			create_philo(t_data *data);
 
 #endif
 
