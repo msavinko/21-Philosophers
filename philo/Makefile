@@ -1,7 +1,7 @@
 NAME_PH 	=	philo
 HEADER_PH	=	philo.h
 
-SRCS_PH		=	philo.c philo_utils.c
+SRCS_PH		=	philo.c philo_utils.c action.c
 OBJS_PH		=	$(SRCS_PH:%.c=%.o)
 
 CC			=	cc

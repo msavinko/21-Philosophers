@@ -6,103 +6,38 @@
 /*   By: marlean <marlean@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/07 10:47:47 by marlean           #+#    #+#             */
-/*   Updated: 2022/05/04 16:43:57 by marlean          ###   ########.fr       */
+/*   Updated: 2022/05/05 17:11:48 by marlean          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
 
-int	take_odd_forks(t_philo *philo)
+long long	my_time(void)
 {
-	t_data			*data;
-	int				i;
-	long long		now;
+	struct timeval	tv;
+	long long		calc_time;
 
-	i = 0;
-	data = philo->data;
-	pthread_mutex_lock(philo->l_fork);
-	pthread_mutex_lock(&data->print_mutex);
-	now = my_time() - data->start_time;
-	printf("%lld %d has taken a left fork\n", now, philo->philo_index );
-	pthread_mutex_unlock(&data->print_mutex);
-	pthread_mutex_lock(philo->r_fork);
-	pthread_mutex_lock(&data->print_mutex);
-	now = my_time() - data->start_time;
-	printf("%lld %d has taken a right fork\n", now, philo->philo_index );
-	pthread_mutex_unlock(&data->print_mutex);
-	pthread_mutex_lock(&data->print_mutex);
-	now = my_time() - data->start_time;
-	printf("%lld %d is eating\n", now, philo->philo_index );
-	pthread_mutex_unlock(&data->print_mutex);
-	pthread_mutex_unlock(philo->l_fork);
-	pthread_mutex_unlock(philo->l_fork);
-
-	// start_eat()
-	// if (pthread_mutex_unlock(philo->l_fork) != 0)
-	// 	return (ft_error(2));
-	// if (pthread_mutex_unlock(philo->r_fork) != 0)
-	// 	return (ft_error(2));
-	return (0);
-}
-// int	take_even_forks(t_philo *philo)
-// {
-// 	t_data			*data;
-// 	int				i;
-// 	long long		now;
-// 	i = 0;
-// 	data = philo->data;
-// 	if (pthread_mutex_lock(philo->l_fork) != 0)
-// 		return (ft_error(2));
-// 	if (pthread_mutex_lock(&data->print_mutex) != 0)
-// 		return (ft_error(2));
-// 	now = my_time() - data->start_time;
-// 	if (now < 0)
-// 		return (-1);
-// 	printf("%lld %d has taken a left fork\n", now, philo->philo_index + 1);
-// 	if (pthread_mutex_unlock(&data->print_mutex) != 0)
-// 		return (ft_error(2));
-// 	if (pthread_mutex_lock(philo->r_fork) != 0)
-// 		return (ft_error(2));
-// 	if (pthread_mutex_lock(&data->print_mutex) != 0)
-// 		return (ft_error(2));
-// 	now = my_time() - data->start_time;
-// 	if (now < 0)
-// 		return (-1);
-// 	printf("%lld %d has taken a right fork\n", now, philo->philo_index + 1);
-// 	if (pthread_mutex_unlock(&data->print_mutex) != 0)
-// 		return (ft_error(2));
-// 	if (pthread_mutex_unlock(philo->l_fork) != 0)
-// 		return (ft_error(2));
-// 	if (pthread_mutex_unlock(philo->r_fork) != 0)
-// 		return (ft_error(2));
-// 	return (0);
-// }
-int	take_forks(t_philo *philo)
-{
-	if (philo->philo_index % 2 != 0)
-	{
-		//usleep(2500);
-		take_odd_forks(philo);
-	}
-	else
-	{
-		my_sleep(10);
-		take_odd_forks(philo);
-	}
-	return (0);
+	if (gettimeofday(&tv, NULL) != 0)
+		return (ft_error(4));
+	calc_time = tv.tv_sec * 1000LL + tv.tv_usec / 1000;
+	return (calc_time);
 }
 
-void	*philo_action(void *philo)
+int	my_sleep(int time)
 {
-	t_philo *tmp_philo;
+	struct timeval	now;
+	struct timeval	start;
 
-	tmp_philo = (t_philo *)philo;
-	while (1)
+	gettimeofday(&start, NULL);
+	gettimeofday(&now, NULL);
+	usleep(time * 900);
+	while (((now.tv_sec * 1000000 + now.tv_usec)
+			- (start.tv_sec * 1000000 + start.tv_usec)) < time * 1000)
 	{
-		if (take_forks(tmp_philo) != 0)
-			return ((void *)-1);
+		usleep(100);
+		gettimeofday(&now, NULL);
 	}
-	return ((void *)0);
+	return (0);
 }
 
 int	create_philo(t_data *data)
@@ -112,14 +47,10 @@ int	create_philo(t_data *data)
 	i = 0;
 	while (i < data->num_of_philo)
 	{
-		if (pthread_create(&(data->id[i]), NULL, &philo_action, &(data->philo[i])) != 0)
+		if (pthread_create(&(data->id[i]), NULL,
+				&philo_action, &(data->philo[i])) != 0)
 			return (ft_error(2));
-		i++;
-	}
-	i = 0;
-	while (i < data->num_of_philo)
-	{
-		if (pthread_join(data->id[i], &data->result) != 0)
+		if (pthread_detach(data->id[i]) != 0)
 			return (ft_error(2));
 		i++;
 	}
@@ -139,9 +70,10 @@ int	main(int argc, char **argv)
 		return (1);
 	if (create_philo(data) != 0)
 		return (1);
-
-	if (pthread_mutex_destroy(&data->print_mutex) != 0)
-		ft_error(2);
+	//monitoring death
+	// if (pthread_mutex_destroy(&data->print_mutex) != 0)
+	// 	ft_error(2);
 	free(data);
+	printf("HERE\n");
 	return (0);
 }

@@ -6,39 +6,11 @@
 /*   By: marlean <marlean@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/07 10:47:58 by marlean           #+#    #+#             */
-/*   Updated: 2022/05/04 16:19:28 by marlean          ###   ########.fr       */
+/*   Updated: 2022/05/05 15:04:07 by marlean          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
-
-long long	my_time(void)
-{
-	struct timeval	tv;
-	long long		calc_time;
-
-	if (gettimeofday(&tv, NULL) != 0)
-		return (ft_error(4));
-	calc_time = tv.tv_sec * 1000LL + tv.tv_usec / 1000;
-	return (calc_time);
-}
-
-int	my_sleep(int time)
-{
-	struct timeval	now;
-	struct timeval	start;
-
-	gettimeofday(&start, NULL);
-	gettimeofday(&now, NULL);
-	usleep(time * 900);
-	while (((now.tv_sec * 1000000 + now.tv_usec)
-			- (start.tv_sec * 1000000 + start.tv_usec)) < time * 1000)
-	{
-		usleep(100);
-		gettimeofday(&now, NULL);
-	}
-	return (0);
-}
 
 int	ft_error(int num)
 {
@@ -82,22 +54,27 @@ int	init_each_philo(t_data *data)
 	int	i;
 
 	i = 0;
-	while (i <= data->num_of_philo)
+	while (i < data->num_of_philo)
 	{
 		if (pthread_mutex_init(&data->forks[i], NULL) != 0)
 			return (ft_error(2));
-		data->philo[i].philo_index = i + 1;
-		data->philo[i].last_eat = my_time();
-		data->philo[i].data = data;
-		data->philo[i].last = 0;
-		data->philo[i].l_fork = &data->forks[i + 1];
-		if (i == 0)
-			data->philo[i].r_fork = &data->forks[data->num_of_philo];
-		else
-			data->philo[i].r_fork = &data->forks[i];
 		i++;
 	}
-	data->philo[i - 1].last = 1;
+	i = 0;
+	while (i < data->num_of_philo)
+	{
+		data->philo[i].index = i + 1;
+		data->philo[i].last_eat = my_time();
+		data->philo[i].data = data;
+		data->philo[i].iam_last = 0;
+		data->philo[i].l_fork = &data->forks[i];
+		if (i == 0)
+			data->philo[i].r_fork = &data->forks[data->num_of_philo - 1];
+		else
+			data->philo[i].r_fork = &data->forks[i - 1];
+		i++;
+	}
+	data->philo[i - 1].iam_last = 1;
 	return (0);
 }
 
@@ -120,7 +97,7 @@ int	init_philo(t_data *data, char **argv)
 	if (pthread_mutex_init(&data->print_mutex, NULL) != 0)
 		return (ft_error(2));
 	data->id = malloc(sizeof(pthread_t) * data->num_of_philo);
-	data->forks = malloc(sizeof(pthread_mutex_t) * data->num_of_philo);
+	data->forks = malloc(sizeof(t_mutex) * data->num_of_philo);
 	data->result = NULL;
 	data->philo = malloc(sizeof(t_philo) * data->num_of_philo);
 	if (!data->philo || !data->id)
