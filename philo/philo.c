@@ -6,7 +6,7 @@
 /*   By: marlean <marlean@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/07 10:47:47 by marlean           #+#    #+#             */
-/*   Updated: 2022/05/05 17:11:48 by marlean          ###   ########.fr       */
+/*   Updated: 2022/05/06 11:32:06 by marlean          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,7 @@ long long	my_time(void)
 {
 	struct timeval	tv;
 	long long		calc_time;
+	//include mutex
 
 	if (gettimeofday(&tv, NULL) != 0)
 		return (ft_error(4));
@@ -34,7 +35,7 @@ int	my_sleep(int time)
 	while (((now.tv_sec * 1000000 + now.tv_usec)
 			- (start.tv_sec * 1000000 + start.tv_usec)) < time * 1000)
 	{
-		usleep(100);
+		usleep(110);
 		gettimeofday(&now, NULL);
 	}
 	return (0);
@@ -70,10 +71,11 @@ int	main(int argc, char **argv)
 		return (1);
 	if (create_philo(data) != 0)
 		return (1);
+	if (death_monitoring(data) != 0)
+		return (1);
 	//monitoring death
 	// if (pthread_mutex_destroy(&data->print_mutex) != 0)
 	// 	ft_error(2);
 	free(data);
-	printf("HERE\n");
 	return (0);
 }

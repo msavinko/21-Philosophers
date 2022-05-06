@@ -6,14 +6,25 @@
 /*   By: marlean <marlean@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/07 10:47:58 by marlean           #+#    #+#             */
-/*   Updated: 2022/05/05 15:04:07 by marlean          ###   ########.fr       */
+/*   Updated: 2022/05/06 10:43:10 by marlean          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
 
+void	ph_print(char *str, t_philo *philo)
+{
+	long long	now;
+
+	pthread_mutex_lock(&philo->data->print_mutex);
+	now = my_time() - philo->data->start_time;
+	printf("%lld %d %s\n", now, philo->index, str);
+	pthread_mutex_unlock(&philo->data->print_mutex);
+}
+
 int	ft_error(int num)
 {
+	//check if mutex needed
 	if (num == 1)
 		write(1, "Wrong input\n", 12);
 	else if (num == 2)

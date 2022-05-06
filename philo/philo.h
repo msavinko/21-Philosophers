@@ -6,7 +6,7 @@
 /*   By: marlean <marlean@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/13 16:59:56 by marlean           #+#    #+#             */
-/*   Updated: 2022/05/05 15:46:02 by marlean          ###   ########.fr       */
+/*   Updated: 2022/05/06 11:19:30 by marlean          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,17 +46,16 @@ typedef struct s_philo
 	int				iam_last;
 }	t_philo;
 
+void		ph_print(char *str, t_philo *philo);
 int			ft_error(int num);
 int			ph_atoi(const char *str);
 int			init_each_philo(t_data *data);
 int			init_philo(t_data *data, char **argv);
 
-void		take_right_fork(t_philo *philo);
+
 void		take_forks(t_philo *philo);
-void		start_forks(t_philo *philo);
-void		ph_eating(t_philo *philo);
-void		ph_sleeping(t_philo *philo);
 void		*philo_action(void *philo_in);
+int			death_monitoring(t_data *data);
 
 long long	my_time(void);
 int			my_sleep(int time);
@@ -72,3 +71,9 @@ int			create_philo(t_data *data);
 
 //usleep 100000 = my_sleep 100
 //15.06
+
+
+
+//!!!!!!!!!!!!!!!!!
+//time mutex??
+//die mutex
