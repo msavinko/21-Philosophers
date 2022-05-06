@@ -6,7 +6,7 @@
 /*   By: marlean <marlean@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/13 16:59:56 by marlean           #+#    #+#             */
-/*   Updated: 2022/05/06 11:19:30 by marlean          ###   ########.fr       */
+/*   Updated: 2022/05/06 13:29:44 by marlean          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,6 +30,7 @@ typedef struct s_data
 	int				num_of_eat;
 	long long		start_time;
 	t_mutex			print_mutex;
+	t_mutex			eat;
 	struct s_philo	*philo;
 	pthread_t		*id;
 	void			*result;
@@ -44,6 +45,7 @@ typedef struct s_philo
 	int				index;
 	long long		last_eat;
 	int				iam_last;
+	int				i_eat;
 }	t_philo;
 
 void		ph_print(char *str, t_philo *philo);
@@ -60,6 +62,9 @@ int			death_monitoring(t_data *data);
 long long	my_time(void);
 int			my_sleep(int time);
 int			create_philo(t_data *data);
+
+int	burn_them_all(t_data *data);
+
 
 #endif
 

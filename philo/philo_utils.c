@@ -6,7 +6,7 @@
 /*   By: marlean <marlean@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/07 10:47:58 by marlean           #+#    #+#             */
-/*   Updated: 2022/05/06 10:43:10 by marlean          ###   ########.fr       */
+/*   Updated: 2022/05/06 13:17:12 by marlean          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,6 +79,7 @@ int	init_each_philo(t_data *data)
 		data->philo[i].data = data;
 		data->philo[i].iam_last = 0;
 		data->philo[i].l_fork = &data->forks[i];
+		data->philo[i].i_eat = 0;
 		if (i == 0)
 			data->philo[i].r_fork = &data->forks[data->num_of_philo - 1];
 		else
@@ -101,11 +102,15 @@ int	init_philo(t_data *data, char **argv)
 		if (data->num_of_eat <= 0)
 			return (ft_error(1));
 	}
+	else
+		data->num_of_eat = 0;
 	if (data->num_of_philo <= 0 || data->time_to_die <= 0
 		|| data->time_to_eat <= 0 || data->time_to_sleep <= 0)
 		return (ft_error(1));
 	data->start_time = my_time();
 	if (pthread_mutex_init(&data->print_mutex, NULL) != 0)
+		return (ft_error(2));
+	if (pthread_mutex_init(&data->eat, NULL) != 0)
 		return (ft_error(2));
 	data->id = malloc(sizeof(pthread_t) * data->num_of_philo);
 	data->forks = malloc(sizeof(t_mutex) * data->num_of_philo);

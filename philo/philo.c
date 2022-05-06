@@ -6,7 +6,7 @@
 /*   By: marlean <marlean@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/07 10:47:47 by marlean           #+#    #+#             */
-/*   Updated: 2022/05/06 11:32:06 by marlean          ###   ########.fr       */
+/*   Updated: 2022/05/06 14:10:01 by marlean          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,8 +74,9 @@ int	main(int argc, char **argv)
 	if (death_monitoring(data) != 0)
 		return (1);
 	//monitoring death
-	// if (pthread_mutex_destroy(&data->print_mutex) != 0)
-	// 	ft_error(2);
+	if (burn_them_all(data) != 0)
+		return (1);
+
 	free(data);
 	return (0);
 }
