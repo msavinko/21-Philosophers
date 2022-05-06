@@ -6,7 +6,7 @@
 /*   By: marlean <marlean@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/07 10:47:47 by marlean           #+#    #+#             */
-/*   Updated: 2022/05/06 14:10:01 by marlean          ###   ########.fr       */
+/*   Updated: 2022/05/06 16:19:19 by marlean          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,11 +71,13 @@ int	main(int argc, char **argv)
 		return (1);
 	if (create_philo(data) != 0)
 		return (1);
-	if (death_monitoring(data) != 0)
-		return (1);
+	if (death_monitoring(data) == 0)
+	{
+		if (burn_them_all(data) != 0)
+			return (1);
+	}
+
 	//monitoring death
-	if (burn_them_all(data) != 0)
-		return (1);
 
 	free(data);
 	return (0);

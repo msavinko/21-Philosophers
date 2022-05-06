@@ -6,7 +6,7 @@
 /*   By: marlean <marlean@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/05 14:21:25 by marlean           #+#    #+#             */
-/*   Updated: 2022/05/06 15:08:24 by marlean          ###   ########.fr       */
+/*   Updated: 2022/05/06 16:20:16 by marlean          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,23 +69,26 @@ int	death_monitoring(t_data *data)
 	int	i;
 	int	tmp_eat;
 	
-	i = 0;
 	tmp_eat = 0;
 
 	while (1)
 	{
-		
+		i = 0;
 		while (i < data->num_of_philo)
 		{
-			// pthread_mutex_lock(&data->eat);
-			if (data->philo[i].i_eat >= data->num_of_eat )
+			pthread_mutex_lock(&data->eat);
+			if (data->philo[i].i_eat == data->num_of_eat )
 				tmp_eat++;
-			printf("\n!!!!eat %d and num %d!!!!\n\n", tmp_eat, i);
-			// pthread_mutex_unlock(&data->eat);
+			//printf("\n!!!!eat %d and num %d!!!!\n\n", tmp_eat, i);
+			pthread_mutex_unlock(&data->eat);
+			usleep(500);
 			i++;
 		}
-		if (tmp_eat == data->num_of_philo)
+		if (tmp_eat == data->num_of_eat)
+		{
+			printf("\nFINISH\n");
 			return (0);
+		}
 	}
 	return (0);
 }
