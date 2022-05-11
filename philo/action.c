@@ -6,7 +6,7 @@
 /*   By: marlean <marlean@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/05 14:21:25 by marlean           #+#    #+#             */
-/*   Updated: 2022/05/11 12:55:02 by marlean          ###   ########.fr       */
+/*   Updated: 2022/05/11 16:10:14 by marlean          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,8 +38,10 @@ void	*philo_action(void *philo_in)
 
 	philo = (t_philo *)philo_in;
 
-	while (1)
+	pthread_mutex_lock(&philo->data->my_mutex);
+	while (1 && philo->data->check == 0)
 	{
+		pthread_mutex_unlock(&philo->data->my_mutex);
 		take_forks(philo);
 		//include death_monitoring
 		ph_print("is eating", philo);
@@ -59,8 +61,9 @@ void	*philo_action(void *philo_in)
 		my_sleep(philo->data->time_to_sleep);
 		ph_print("is thinking", philo);
 		usleep(500);
+		pthread_mutex_lock(&philo->data->my_mutex);
 	}
-
+	pthread_mutex_unlock(&philo->data->my_mutex);
 	return ((void *)0);
 }
 
@@ -81,12 +84,14 @@ int	death_monitoring(t_data *data)
 				tmp_eat++;
 			//printf("\n!!!!eat %d and num %d!!!!\n\n", tmp_eat, i);
 			pthread_mutex_unlock(&data->my_mutex);
-			usleep(500);
 			i++;
 		}
 		if (tmp_eat == data->num_of_eat)
 		{
+			pthread_mutex_lock(&data->my_mutex);
+			data->check = 1;
 			printf("\nFINISH\n");
+			burn_them_all(data);
 			return (0);
 		}
 	}

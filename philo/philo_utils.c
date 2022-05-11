@@ -6,7 +6,7 @@
 /*   By: marlean <marlean@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/07 10:47:58 by marlean           #+#    #+#             */
-/*   Updated: 2022/05/11 12:18:29 by marlean          ###   ########.fr       */
+/*   Updated: 2022/05/11 14:18:52 by marlean          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,8 +31,8 @@ int	ft_error(int num)
 		write (1, "Mutex error\n", 12);
 	else if (num == 3)
 		write (1, "Malloc error\n", 13);
-	else if (num == 4)
-		write (1, "Time error\n", 11);
+	else
+		write (1, "Error\n", 6);
 	return (-1);
 }
 
