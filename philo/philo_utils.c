@@ -6,7 +6,7 @@
 /*   By: marlean <marlean@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/07 10:47:58 by marlean           #+#    #+#             */
-/*   Updated: 2022/05/06 13:17:12 by marlean          ###   ########.fr       */
+/*   Updated: 2022/05/11 12:18:29 by marlean          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,10 +16,10 @@ void	ph_print(char *str, t_philo *philo)
 {
 	long long	now;
 
-	pthread_mutex_lock(&philo->data->print_mutex);
+	pthread_mutex_lock(&philo->data->my_mutex);
 	now = my_time() - philo->data->start_time;
 	printf("%lld %d %s\n", now, philo->index, str);
-	pthread_mutex_unlock(&philo->data->print_mutex);
+	pthread_mutex_unlock(&philo->data->my_mutex);
 }
 
 int	ft_error(int num)
@@ -108,13 +108,10 @@ int	init_philo(t_data *data, char **argv)
 		|| data->time_to_eat <= 0 || data->time_to_sleep <= 0)
 		return (ft_error(1));
 	data->start_time = my_time();
-	if (pthread_mutex_init(&data->print_mutex, NULL) != 0)
-		return (ft_error(2));
-	if (pthread_mutex_init(&data->eat, NULL) != 0)
+	if (pthread_mutex_init(&data->my_mutex, NULL) != 0)
 		return (ft_error(2));
 	data->id = malloc(sizeof(pthread_t) * data->num_of_philo);
 	data->forks = malloc(sizeof(t_mutex) * data->num_of_philo);
-	data->result = NULL;
 	data->philo = malloc(sizeof(t_philo) * data->num_of_philo);
 	if (!data->philo || !data->id)
 		return (ft_error(3));

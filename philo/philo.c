@@ -6,7 +6,7 @@
 /*   By: marlean <marlean@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/07 10:47:47 by marlean           #+#    #+#             */
-/*   Updated: 2022/05/06 16:19:19 by marlean          ###   ########.fr       */
+/*   Updated: 2022/05/11 12:29:04 by marlean          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,13 +15,13 @@
 long long	my_time(void)
 {
 	struct timeval	tv;
-	long long		calc_time;
+	long long		current_time;
 	//include mutex
 
 	if (gettimeofday(&tv, NULL) != 0)
 		return (ft_error(4));
-	calc_time = tv.tv_sec * 1000LL + tv.tv_usec / 1000;
-	return (calc_time);
+	current_time = tv.tv_sec * 1000LL + tv.tv_usec / 1000;
+	return (current_time);
 }
 
 int	my_sleep(int time)

@@ -6,7 +6,7 @@
 /*   By: marlean <marlean@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/13 16:59:56 by marlean           #+#    #+#             */
-/*   Updated: 2022/05/06 13:29:44 by marlean          ###   ########.fr       */
+/*   Updated: 2022/05/11 12:18:12 by marlean          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,11 +29,9 @@ typedef struct s_data
 	int				time_to_sleep;
 	int				num_of_eat;
 	long long		start_time;
-	t_mutex			print_mutex;
-	t_mutex			eat;
+	t_mutex			my_mutex;
 	struct s_philo	*philo;
 	pthread_t		*id;
-	void			*result;
 	t_mutex			*forks;
 }	t_data;
 
@@ -75,7 +73,6 @@ int	burn_them_all(t_data *data);
 // check death
 
 //usleep 100000 = my_sleep 100
-//15.06
 
 
 
