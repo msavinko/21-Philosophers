@@ -6,7 +6,7 @@
 /*   By: marlean <marlean@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/05 14:21:25 by marlean           #+#    #+#             */
-/*   Updated: 2022/05/11 16:10:14 by marlean          ###   ########.fr       */
+/*   Updated: 2022/05/12 10:54:33 by marlean          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,35 +65,4 @@ void	*philo_action(void *philo_in)
 	}
 	pthread_mutex_unlock(&philo->data->my_mutex);
 	return ((void *)0);
-}
-
-int	death_monitoring(t_data *data)
-{
-	int	i;
-	int	tmp_eat;
-	
-	tmp_eat = 0;
-
-	while (1)
-	{
-		i = 0;
-		while (i < data->num_of_philo)
-		{
-			pthread_mutex_lock(&data->my_mutex);
-			if (data->philo[i].i_eat == data->num_of_eat )
-				tmp_eat++;
-			//printf("\n!!!!eat %d and num %d!!!!\n\n", tmp_eat, i);
-			pthread_mutex_unlock(&data->my_mutex);
-			i++;
-		}
-		if (tmp_eat == data->num_of_eat)
-		{
-			pthread_mutex_lock(&data->my_mutex);
-			data->check = 1;
-			printf("\nFINISH\n");
-			burn_them_all(data);
-			return (0);
-		}
-	}
-	return (0);
 }
