@@ -6,7 +6,7 @@
 /*   By: marlean <marlean@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/13 16:59:56 by marlean           #+#    #+#             */
-/*   Updated: 2022/05/12 13:32:35 by marlean          ###   ########.fr       */
+/*   Updated: 2022/05/12 14:45:59 by marlean          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,8 +33,7 @@ typedef struct s_data
 	struct s_philo	*philo;
 	pthread_t		*id;
 	t_mutex			*forks;
-	int				check_death;
-	int				check_eat;
+	int				death;
 }	t_data;
 
 typedef struct s_philo

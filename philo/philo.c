@@ -6,7 +6,7 @@
 /*   By: marlean <marlean@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/07 10:47:47 by marlean           #+#    #+#             */
-/*   Updated: 2022/05/12 13:42:13 by marlean          ###   ########.fr       */
+/*   Updated: 2022/05/12 15:35:39 by marlean          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,10 +31,35 @@ int	check_eat(t_data *data)
 	if (tmp_eat == data->num_of_philo)
 	{
 		pthread_mutex_lock(&data->my_mutex);
-		data->check_eat = 1;
+		data->death = 1;
 		//data->check = 1;
 		printf("\nFINISH\n");
 		// burn_them_all(data);
+		return (1);
+	}
+	return (0);
+}
+
+int	check_death(t_data *data, int i)
+{
+	long long	time_diff;
+	long long	now;
+	
+	pthread_mutex_lock(&data->my_mutex);
+	now = my_time() - data->start_time;
+	time_diff = now - data->philo[i].last_eat;
+	//printf("%lld %d %s\n", now, philo->index, str);
+	
+	// printf("philo %d time diff %lld now and time to die %d\n", data->philo[i].index, time_diff, data->time_to_die);
+	pthread_mutex_unlock(&data->my_mutex);
+	if (time_diff >= data->time_to_die)
+	{
+		pthread_mutex_lock(&data->my_mutex);
+		ph_print("died", &data->philo[i]);
+		printf("DEAD\n");
+		data->death = 1;
+		// pthread_mutex_unlock(&data->my_mutex);
+
 		return (1);
 	}
 	return (0);
@@ -47,18 +72,19 @@ int	monitoring(t_data *data)
 	i = 0;
 	while (1)
 	{
-		//is_died(data);
-
 		while (i < data->num_of_philo)
 		{
+			if (check_death(data, i) == 1)
+				break ;
 			if (data->num_of_eat)
 			{
 				if (check_eat(data) == 1)
-					return (1);
+					break ;
 			}
 			i++;
 		}
 		i = 0;
+		usleep(10);
 	}
 	return (0);
 }
@@ -94,7 +120,9 @@ int	main(int argc, char **argv)
 		return (1);
 	if (create_philo(data) != 0)
 		return (1);
-	monitoring(data);
+	if (monitoring(data) != 0)
+		return (1);
 	burn_them_all(data);
 	return (0);
 }
+
