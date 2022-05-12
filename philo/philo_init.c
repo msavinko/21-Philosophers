@@ -6,7 +6,7 @@
 /*   By: marlean <marlean@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/07 10:47:58 by marlean           #+#    #+#             */
-/*   Updated: 2022/05/12 10:44:28 by marlean          ###   ########.fr       */
+/*   Updated: 2022/05/12 13:33:03 by marlean          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,6 +68,8 @@ int	init_each_philo(t_data *data)
 
 int	init_philo(t_data *data, char **argv)
 {
+	data->check_death = 0;
+	data->check_eat = 0;
 	data->num_of_philo = ph_atoi(argv[1]);
 	data->time_to_die = ph_atoi(argv[2]);
 	data->time_to_eat = ph_atoi(argv[3]);
@@ -83,7 +85,6 @@ int	init_philo(t_data *data, char **argv)
 	if (data->num_of_philo <= 0 || data->time_to_die < 0
 		|| data->time_to_eat < 0 || data->time_to_sleep < 0)
 		return (ft_error(1));
-	data->start_time = my_time();
 	if (pthread_mutex_init(&data->my_mutex, NULL) != 0)
 		return (ft_error(2));
 	data->id = malloc(sizeof(pthread_t) * data->num_of_philo);

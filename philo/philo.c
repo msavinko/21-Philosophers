@@ -6,42 +6,59 @@
 /*   By: marlean <marlean@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/07 10:47:47 by marlean           #+#    #+#             */
-/*   Updated: 2022/05/12 10:55:05 by marlean          ###   ########.fr       */
+/*   Updated: 2022/05/12 13:42:13 by marlean          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
 
-int	monitoring(t_data *data)
+int	check_eat(t_data *data)
 {
 	int	i;
 	int	tmp_eat;
-	
-	tmp_eat = 0;
 
+	tmp_eat = 0;
+	i = 0;
+	while (i < data->num_of_philo)
+	{
+		pthread_mutex_lock(&data->my_mutex);
+		if (data->philo[i].i_eat >= data->num_of_eat )
+			tmp_eat++;
+		pthread_mutex_unlock(&data->my_mutex);
+		i++;
+
+	}
+	if (tmp_eat == data->num_of_philo)
+	{
+		pthread_mutex_lock(&data->my_mutex);
+		data->check_eat = 1;
+		//data->check = 1;
+		printf("\nFINISH\n");
+		// burn_them_all(data);
+		return (1);
+	}
+	return (0);
+}
+
+int	monitoring(t_data *data)
+{
+	int	i;
+
+	i = 0;
 	while (1)
 	{
 		//is_died(data);
-		if (data->num_of_eat)
-			check_eat()
-		i = 0;
+
 		while (i < data->num_of_philo)
 		{
-			pthread_mutex_lock(&data->my_mutex);
-			if (data->philo[i].i_eat == data->num_of_eat )
-				tmp_eat++;
-			//printf("\n!!!!eat %d and num %d!!!!\n\n", tmp_eat, i);
-			pthread_mutex_unlock(&data->my_mutex);
+			if (data->num_of_eat)
+			{
+				if (check_eat(data) == 1)
+					return (1);
+			}
 			i++;
 		}
-		if (tmp_eat == data->num_of_eat)
-		{
-			pthread_mutex_lock(&data->my_mutex);
-			data->check = 1;
-			printf("\nFINISH\n");
-			burn_them_all(data);
-			return (0);
-		}
+		i = 0;
 	}
 	return (0);
 }
@@ -51,6 +68,7 @@ int	create_philo(t_data *data)
 	int	i;
 
 	i = 0;
+	data->start_time = my_time();
 	while (i < data->num_of_philo)
 	{
 		if (pthread_create(&(data->id[i]), NULL,
@@ -76,14 +94,7 @@ int	main(int argc, char **argv)
 		return (1);
 	if (create_philo(data) != 0)
 		return (1);
-	if (monitoring(data) == 0)
-	{
-		if (burn_them_all(data) != 0)
-			return (1);
-	}
-
-	//monitoring death
-
-	free(data);
+	monitoring(data);
+	burn_them_all(data);
 	return (0);
 }
