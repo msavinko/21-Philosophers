@@ -6,7 +6,7 @@
 /*   By: marlean <marlean@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/07 10:47:58 by marlean           #+#    #+#             */
-/*   Updated: 2022/05/12 14:46:09 by marlean          ###   ########.fr       */
+/*   Updated: 2022/05/13 12:50:21 by marlean          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,6 +69,7 @@ int	init_each_philo(t_data *data)
 int	init_philo(t_data *data, char **argv)
 {
 	data->death = 0;
+	data->start_time = my_time();
 	data->num_of_philo = ph_atoi(argv[1]);
 	data->time_to_die = ph_atoi(argv[2]);
 	data->time_to_eat = ph_atoi(argv[3]);

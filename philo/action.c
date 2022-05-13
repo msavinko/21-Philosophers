@@ -6,7 +6,7 @@
 /*   By: marlean <marlean@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/05 14:21:25 by marlean           #+#    #+#             */
-/*   Updated: 2022/05/12 15:14:16 by marlean          ###   ########.fr       */
+/*   Updated: 2022/05/13 12:49:26 by marlean          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,23 +41,23 @@ void	*philo_action(void *philo_in)
 	// pthread_mutex_lock(&philo->data->my_mutex);
 	while (1)
 	{
-		pthread_mutex_lock(&philo->data->my_mutex);
-		if (philo->data->death == 1)
-			break ;
-		pthread_mutex_unlock(&philo->data->my_mutex);
-
 		take_forks(philo);
 		ph_print("is eating", philo);
+
 		pthread_mutex_lock(&philo->data->my_mutex);
 		philo->last_eat = my_time() - philo->data->start_time;
+		// printf("philo: %d last time eat: %lld\n", philo->index, philo->last_eat);
 		pthread_mutex_unlock(&philo->data->my_mutex);
+
 		my_sleep(philo->data->time_to_eat);
-		pthread_mutex_unlock(philo->r_fork);
 		pthread_mutex_unlock(philo->l_fork);
+		pthread_mutex_unlock(philo->r_fork);
+
 		pthread_mutex_lock(&philo->data->my_mutex);
 		if (philo->data->num_of_eat > philo->i_eat)
 			philo->i_eat++;
 		pthread_mutex_unlock(&philo->data->my_mutex);
+
 		ph_print("is sleeping", philo);
 		my_sleep(philo->data->time_to_sleep);
 		ph_print("is thinking", philo);

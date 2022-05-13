@@ -6,7 +6,7 @@
 /*   By: marlean <marlean@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/07 10:47:47 by marlean           #+#    #+#             */
-/*   Updated: 2022/05/12 15:35:39 by marlean          ###   ########.fr       */
+/*   Updated: 2022/05/13 13:00:01 by marlean          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,20 +48,30 @@ int	check_death(t_data *data, int i)
 	pthread_mutex_lock(&data->my_mutex);
 	now = my_time() - data->start_time;
 	time_diff = now - data->philo[i].last_eat;
-	//printf("%lld %d %s\n", now, philo->index, str);
+	// printf("philo: %d now: %lld and last time eat: %lld\n", data->philo[i].index, now, data->philo[i].last_eat);
 	
-	// printf("philo %d time diff %lld now and time to die %d\n", data->philo[i].index, time_diff, data->time_to_die);
-	pthread_mutex_unlock(&data->my_mutex);
-	if (time_diff >= data->time_to_die)
+	// printf("philo: %d\nnow: %lld\nlast time eat: %lld\ntime diff %lld and time to die %d\n\n",
+	// 	 data->philo[i].index, now, data->philo[i].last_eat, time_diff, data->time_to_die);
+
+	if (time_diff > data->time_to_die)
 	{
-		pthread_mutex_lock(&data->my_mutex);
-		ph_print("died", &data->philo[i]);
 		printf("DEAD\n");
-		data->death = 1;
+		// ph_print("died", &data->philo[i]);
+
+	// 		long long	now;
+
+	// pthread_mutex_lock(&data->my_mutex);
+	// now = my_time() - data->start_time;
+	// printf("%lld %d died\n", now, data->philo[i].index);
+	// pthread_mutex_unlock(&data->my_mutex);
+		return (1);
+		// pthread_mutex_lock(&data->my_mutex);
+		// data->death = 1;
 		// pthread_mutex_unlock(&data->my_mutex);
 
-		return (1);
+		// return (1);
 	}
+	pthread_mutex_unlock(&data->my_mutex);
 	return (0);
 }
 
@@ -75,11 +85,14 @@ int	monitoring(t_data *data)
 		while (i < data->num_of_philo)
 		{
 			if (check_death(data, i) == 1)
-				break ;
+			{
+				// printf("DEAD\n");
+				return (1);
+			}
 			if (data->num_of_eat)
 			{
 				if (check_eat(data) == 1)
-					break ;
+					return (1);
 			}
 			i++;
 		}
@@ -94,7 +107,6 @@ int	create_philo(t_data *data)
 	int	i;
 
 	i = 0;
-	data->start_time = my_time();
 	while (i < data->num_of_philo)
 	{
 		if (pthread_create(&(data->id[i]), NULL,
