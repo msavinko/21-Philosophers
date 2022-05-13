@@ -6,7 +6,7 @@
 /*   By: marlean <marlean@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/05 14:21:25 by marlean           #+#    #+#             */
-/*   Updated: 2022/05/13 12:49:26 by marlean          ###   ########.fr       */
+/*   Updated: 2022/05/13 15:41:12 by marlean          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,15 +38,15 @@ void	*philo_action(void *philo_in)
 	t_philo	*philo;
 
 	philo = (t_philo *)philo_in;
-	// pthread_mutex_lock(&philo->data->my_mutex);
 	while (1)
 	{
 		take_forks(philo);
+		// pthread_mutex_unlock(&philo->data->my_mutex);
+		
 		ph_print("is eating", philo);
 
 		pthread_mutex_lock(&philo->data->my_mutex);
 		philo->last_eat = my_time() - philo->data->start_time;
-		// printf("philo: %d last time eat: %lld\n", philo->index, philo->last_eat);
 		pthread_mutex_unlock(&philo->data->my_mutex);
 
 		my_sleep(philo->data->time_to_eat);
@@ -61,9 +61,7 @@ void	*philo_action(void *philo_in)
 		ph_print("is sleeping", philo);
 		my_sleep(philo->data->time_to_sleep);
 		ph_print("is thinking", philo);
-		// pthread_mutex_lock(&philo->data->my_mutex);
 		usleep(10);
 	}
-	// pthread_mutex_unlock(&philo->data->my_mutex);
 	return ((void *)0);
 }

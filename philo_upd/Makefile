@@ -6,7 +6,8 @@ SRCS_PH		=	philo.c philo_init.c philo_utils.c\
 OBJS_PH		=	$(SRCS_PH:%.c=%.o)
 
 CC			=	cc
-CFLAGS		=	-Wall -Wextra -Werror -fsanitize=thread #DONT FORGET TO REMOVE THIS FLAG
+CFLAGS		=	-Wall -Wextra -Werror 
+#-fsanitize=thread #DONT FORGET TO REMOVE THIS FLAG
 RM			=	rm -f
 
 .PHONY		:	all clean fclean re
@@ -27,10 +28,10 @@ fclean		:	clean
 
 re			:	fclean all
 
-# 21 290 100 100
-# 50 210 100 100
-# 199 2000 600 60
-# 7 190 60 60
+# 21 290 100 100 did not pass
+# 50 210 100 100 did not pass
+# 199 2000 600 60 did not pass
+# 7 190 60 60 passed
 # 8 130 60 60
 
 # not necessarily  

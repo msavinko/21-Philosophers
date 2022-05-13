@@ -6,7 +6,7 @@
 /*   By: marlean <marlean@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/07 10:47:58 by marlean           #+#    #+#             */
-/*   Updated: 2022/05/13 12:50:21 by marlean          ###   ########.fr       */
+/*   Updated: 2022/05/13 14:55:20 by marlean          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,7 +51,7 @@ int	init_each_philo(t_data *data)
 	while (i < data->num_of_philo)
 	{
 		data->philo[i].index = i + 1;
-		data->philo[i].last_eat = my_time();
+		data->philo[i].last_eat = my_time() - data->start_time;
 		data->philo[i].data = data;
 		data->philo[i].iam_last = 0;
 		data->philo[i].l_fork = &data->forks[i];

@@ -6,7 +6,7 @@
 /*   By: marlean <marlean@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/12 10:43:36 by marlean           #+#    #+#             */
-/*   Updated: 2022/05/13 11:29:08 by marlean          ###   ########.fr       */
+/*   Updated: 2022/05/13 15:29:53 by marlean          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,6 @@ long long	my_time(void)
 {
 	struct timeval	tv;
 	long long		current_time;
-	//include mutex
 
 	if (gettimeofday(&tv, NULL) != 0)
 		return (ft_error(4));
