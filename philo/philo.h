@@ -6,7 +6,7 @@
 /*   By: marlean <marlean@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/13 16:59:56 by marlean           #+#    #+#             */
-/*   Updated: 2022/05/12 14:45:59 by marlean          ###   ########.fr       */
+/*   Updated: 2022/05/16 12:50:04 by marlean          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,33 +50,14 @@ typedef struct s_philo
 void		ph_print(char *str, t_philo *philo);
 int			ft_error(int num);
 int			ph_atoi(const char *str);
-int			init_each_philo(t_data *data);
+void		init_each_philo(t_data *data);
 int			init_philo(t_data *data, char **argv);
-
-
 void		take_forks(t_philo *philo);
 void		*philo_action(void *philo_in);
 int			monitoring(t_data *data);
-
 long long	my_time(void);
-void			my_sleep(int time);
+void		my_sleep(int time);
 int			create_philo(t_data *data);
-
 int			burn_them_all(t_data *data);
 
-
 #endif
-
-//TODO
-
-// eat
-// create my free function
-// check death
-
-//usleep 100000 = my_sleep 100
-
-
-
-//!!!!!!!!!!!!!!!!!
-//time mutex??
-//die mutex

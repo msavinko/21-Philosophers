@@ -2,11 +2,11 @@ NAME_PH 	=	philo
 HEADER_PH	=	philo.h
 
 SRCS_PH		=	philo.c philo_init.c philo_utils.c\
-				action.c destroy.c
+				action.c
 OBJS_PH		=	$(SRCS_PH:%.c=%.o)
 
 CC			=	cc
-CFLAGS		=	-Wall -Wextra -Werror -fsanitize=thread #DONT FORGET TO REMOVE THIS FLAG
+CFLAGS		=	-Wall -Wextra -Werror #-fsanitize=thread #DONT FORGET TO REMOVE THIS FLAG
 RM			=	rm -f
 
 .PHONY		:	all clean fclean re
@@ -56,3 +56,5 @@ re			:	fclean all
 # ◦ timestamp_in_ms X died
 
 # valgrind ./philo 7 190 60 60 --leak-check=full
+# ps - check ongoing process
+# leaks PID - check leaks of ongoing process

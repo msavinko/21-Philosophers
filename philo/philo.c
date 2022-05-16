@@ -6,7 +6,7 @@
 /*   By: marlean <marlean@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/07 10:47:47 by marlean           #+#    #+#             */
-/*   Updated: 2022/05/13 15:33:08 by marlean          ###   ########.fr       */
+/*   Updated: 2022/05/16 12:51:54 by marlean          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,16 +22,14 @@ int	check_eat(t_data *data)
 	while (i < data->num_of_philo)
 	{
 		pthread_mutex_lock(&data->my_mutex);
-		if (data->philo[i].i_eat >= data->num_of_eat )
+		if (data->philo[i].i_eat >= data->num_of_eat)
 			tmp_eat++;
 		pthread_mutex_unlock(&data->my_mutex);
 		i++;
-
 	}
 	if (tmp_eat == data->num_of_philo)
 	{
 		pthread_mutex_lock(&data->my_mutex);
-
 		return (1);
 	}
 	return (0);
@@ -41,14 +39,12 @@ int	check_death(t_data *data, int i)
 {
 	long long	time_diff;
 	long long	now;
-	
+
 	pthread_mutex_lock(&data->my_mutex);
 	now = my_time() - data->start_time;
 	time_diff = now - data->philo[i].last_eat;
 	if (time_diff > data->time_to_die)
 	{
-		long long	now;
-
 		now = my_time() - data->start_time;
 		printf("%lld %d died\n", now, data->philo[i].index);
 		return (1);
@@ -76,7 +72,7 @@ int	monitoring(t_data *data)
 			i++;
 		}
 		i = 0;
-		usleep(10);
+		usleep(500);
 	}
 	return (0);
 }
@@ -115,4 +111,3 @@ int	main(int argc, char **argv)
 	burn_them_all(data);
 	return (0);
 }
-

@@ -6,7 +6,7 @@
 /*   By: marlean <marlean@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/07 10:47:58 by marlean           #+#    #+#             */
-/*   Updated: 2022/05/13 14:55:20 by marlean          ###   ########.fr       */
+/*   Updated: 2022/05/16 12:49:10 by marlean          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,15 +36,14 @@ int	ph_atoi(const char *str)
 	return (res);
 }
 
-int	init_each_philo(t_data *data)
+void	init_each_philo(t_data *data)
 {
 	int	i;
 
 	i = 0;
 	while (i < data->num_of_philo)
 	{
-		if (pthread_mutex_init(&data->forks[i], NULL) != 0)
-			return (ft_error(2));
+		pthread_mutex_init(&data->forks[i], NULL);
 		i++;
 	}
 	i = 0;
@@ -63,7 +62,6 @@ int	init_each_philo(t_data *data)
 		i++;
 	}
 	data->philo[i - 1].iam_last = 1;
-	return (0);
 }
 
 int	init_philo(t_data *data, char **argv)
@@ -85,14 +83,12 @@ int	init_philo(t_data *data, char **argv)
 	if (data->num_of_philo <= 0 || data->time_to_die < 0
 		|| data->time_to_eat < 0 || data->time_to_sleep < 0)
 		return (ft_error(1));
-	if (pthread_mutex_init(&data->my_mutex, NULL) != 0)
-		return (ft_error(2));
+	pthread_mutex_init(&data->my_mutex, NULL);
 	data->id = malloc(sizeof(pthread_t) * data->num_of_philo);
 	data->forks = malloc(sizeof(t_mutex) * data->num_of_philo);
 	data->philo = malloc(sizeof(t_philo) * data->num_of_philo);
-	if (!data->philo || !data->id)
+	if (!data->id || !data->forks || !data->philo)
 		return (ft_error(3));
-	if (init_each_philo(data) != 0)
-		return (-1);
+	init_each_philo(data);
 	return (0);
 }

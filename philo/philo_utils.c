@@ -6,11 +6,31 @@
 /*   By: marlean <marlean@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/12 10:43:36 by marlean           #+#    #+#             */
-/*   Updated: 2022/05/13 15:29:53 by marlean          ###   ########.fr       */
+/*   Updated: 2022/05/16 12:06:26 by marlean          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
+
+int	burn_them_all(t_data *data)
+{
+	int	i;
+
+	i = 0;
+	while (i < data->num_of_philo)
+	{
+		pthread_mutex_destroy(&data->forks[i]);
+		i++;
+	}
+	pthread_mutex_destroy(&data->my_mutex);
+	if (data->forks)
+		free(data->forks);
+	if (data->philo)
+		free(data->philo);
+	if (data)
+		free(data);
+	return (0);
+}
 
 void	ph_print(char *str, t_philo *philo)
 {
@@ -24,7 +44,6 @@ void	ph_print(char *str, t_philo *philo)
 
 int	ft_error(int num)
 {
-	//check if mutex needed
 	if (num == 1)
 		write(1, "Wrong input\n", 12);
 	else if (num == 2)
@@ -43,23 +62,17 @@ long long	my_time(void)
 	struct timeval	tv;
 	long long		current_time;
 
-	if (gettimeofday(&tv, NULL) != 0)
-		return (ft_error(4));
+	gettimeofday(&tv, NULL);
 	current_time = tv.tv_sec * 1000 + tv.tv_usec / 1000;
 	return (current_time);
 }
 
 void	my_sleep(int ms)
 {
-	struct timeval	start;
-	struct timeval	now;
+	long	time;
 
-	gettimeofday(&start, 0);
-	gettimeofday(&now, 0);
-	while (((now.tv_sec - start.tv_sec) * 1000 +
-		(now.tv_usec - start.tv_usec) / 1000) < ms)
-		{
-			usleep(10);
-			gettimeofday(&now, 0);
-		}
+	time = my_time();
+	usleep(ms * 920);
+	while (my_time() < time + ms)
+		usleep(ms * 2);
 }
