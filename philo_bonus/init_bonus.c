@@ -1,16 +1,36 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   philo_init.c                                       :+:      :+:    :+:   */
+/*   init_bonus.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: marlean <marlean@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/04/07 10:47:58 by marlean           #+#    #+#             */
-/*   Updated: 2022/05/16 13:20:27 by marlean          ###   ########.fr       */
+/*   Created: 2022/05/16 19:29:36 by marlean           #+#    #+#             */
+/*   Updated: 2022/05/16 19:34:14 by marlean          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "philo.h"
+#include "philo_bonus.h"
+
+long long	my_time(void)
+{
+	struct timeval	tv;
+	long long		current_time;
+
+	gettimeofday(&tv, NULL);
+	current_time = tv.tv_sec * 1000 + tv.tv_usec / 1000;
+	return (current_time);
+}
+
+void	my_sleep(int ms)
+{
+	long	time;
+
+	time = my_time();
+	usleep(ms * 920);
+	while (my_time() < time + ms)
+		usleep(ms * 2);
+}
 
 int	ph_atoi(const char *str)
 {
@@ -36,37 +56,8 @@ int	ph_atoi(const char *str)
 	return (res);
 }
 
-void	init_each_philo(t_data *data)
+int	init_data(t_data *data, char **argv)
 {
-	int	i;
-
-	i = 0;
-	while (i < data->num_of_philo)
-	{
-		pthread_mutex_init(&data->forks[i], NULL);
-		i++;
-	}
-	i = 0;
-	while (i < data->num_of_philo)
-	{
-		data->philo[i].index = i + 1;
-		data->philo[i].last_eat = my_time() - data->start_time;
-		data->philo[i].data = data;
-		data->philo[i].iam_last = 0;
-		data->philo[i].l_fork = &data->forks[i];
-		data->philo[i].i_eat = 0;
-		if (i == 0)
-			data->philo[i].r_fork = &data->forks[data->num_of_philo - 1];
-		else
-			data->philo[i].r_fork = &data->forks[i - 1];
-		i++;
-	}
-	data->philo[i - 1].iam_last = 1;
-}
-
-int	init_philo(t_data *data, char **argv)
-{
-	data->death = 0;
 	data->start_time = my_time();
 	data->num_of_philo = ph_atoi(argv[1]);
 	data->time_to_die = ph_atoi(argv[2]);
@@ -83,12 +74,5 @@ int	init_philo(t_data *data, char **argv)
 	if (data->num_of_philo <= 0 || data->time_to_die < 0
 		|| data->time_to_eat < 0 || data->time_to_sleep < 0)
 		return (ft_error(1));
-	pthread_mutex_init(&data->my_mutex, NULL);
-	data->id = malloc(sizeof(pthread_t) * data->num_of_philo);
-	data->forks = malloc(sizeof(t_mutex) * data->num_of_philo);
-	data->philo = malloc(sizeof(t_philo) * data->num_of_philo);
-	if (!data->id || !data->forks || !data->philo)
-		return (ft_error(3));
-	init_each_philo(data);
 	return (0);
 }

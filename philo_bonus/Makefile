@@ -1,37 +1,35 @@
-NAME_PH 	=	philo
-HEADER_PH	=	philo.h
+NAME_PHB 	=	philo_bonus
+HEADER_PHB	=	philo_bonus.h
 
-SRCS_PH		=	philo.c philo_init.c philo_utils.c\
-				action.c destroy.c
-OBJS_PH		=	$(SRCS_PH:%.c=%.o)
+SRCS_PHB		=	philo_bonus.c 
+OBJS_PHB		=	$(SRCS_PHB:%.c=%.o)
 
 CC			=	cc
-CFLAGS		=	-Wall -Wextra -Werror 
-#-fsanitize=thread #DONT FORGET TO REMOVE THIS FLAG
+CFLAGS		=	-Wall -Wextra -Werror #-fsanitize=thread #DONT FORGET TO REMOVE THIS FLAG
 RM			=	rm -f
 
 .PHONY		:	all clean fclean re
 
-all			:	$(NAME_PH)
+all			:	$(NAME_PHB)
 
-$(NAME_PH)	:	$(OBJS_PH)
-			$(CC) $(CFLAGS) $(OBJS_PH) -o $@
+$(NAME_PHB)	:	$(OBJS_PHB)
+			$(CC) $(CFLAGS) $(OBJS_PHB) -o $@
 
-%.o			:	%.c $(HEADER_PH) Makefile
+%.o			:	%.c $(HEADER_PHB) Makefile
 			$(CC) $(CFLAGS) -c $< -o $@
 
 clean		:
-			$(RM) $(OBJS_PH)
+			$(RM) $(OBJS_PHB)
 
 fclean		:	clean
-			$(RM) $(NAME_PH)
+			$(RM) $(NAME_PHB)
 
 re			:	fclean all
 
-# 21 290 100 100 did not pass
-# 50 210 100 100 did not pass
-# 199 2000 600 60 did not pass
-# 7 190 60 60 passed
+# 21 290 100 100
+# 50 210 100 100
+# 199 2000 600 60
+# 7 190 60 60
 # 8 130 60 60
 
 # not necessarily  
@@ -57,3 +55,5 @@ re			:	fclean all
 # ◦ timestamp_in_ms X died
 
 # valgrind ./philo 7 190 60 60 --leak-check=full
+# ps - check ongoing process
+# leaks PID - check leaks of ongoing process
