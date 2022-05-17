@@ -6,7 +6,7 @@
 /*   By: marlean <marlean@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/16 18:35:26 by marlean           #+#    #+#             */
-/*   Updated: 2022/05/17 14:21:10 by marlean          ###   ########.fr       */
+/*   Updated: 2022/05/17 14:44:25 by marlean          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,7 @@
 typedef struct s_data
 {
 	long long	start_time;
+	long long	now;
 	int			num_of_philo;
 	int			time_to_die;
 	int			time_to_eat;
@@ -38,6 +39,7 @@ typedef struct s_data
 	sem_t		*eat;
 	sem_t		*die;
 	int			pid_philo;
+	int			ph_index;
 }	t_data;
 
 long long	my_time(void);

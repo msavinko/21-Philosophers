@@ -6,7 +6,7 @@
 /*   By: marlean <marlean@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/16 19:29:36 by marlean           #+#    #+#             */
-/*   Updated: 2022/05/17 11:17:32 by marlean          ###   ########.fr       */
+/*   Updated: 2022/05/17 14:27:27 by marlean          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,6 +71,7 @@ void	init_semaphores(t_data *data)
 int	init_data(t_data *data, char **argv)
 {
 	data->start_time = my_time();
+	data->now = my_time();
 	data->num_of_philo = ph_atoi(argv[1]);
 	data->time_to_die = ph_atoi(argv[2]);
 	data->time_to_eat = ph_atoi(argv[3]);
