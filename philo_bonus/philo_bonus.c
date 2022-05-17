@@ -6,7 +6,7 @@
 /*   By: marlean <marlean@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/16 18:37:24 by marlean           #+#    #+#             */
-/*   Updated: 2022/05/16 19:29:28 by marlean          ###   ########.fr       */
+/*   Updated: 2022/05/17 14:19:43 by marlean          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,32 @@ int	ft_error(int num)
 	return (1);
 }
 
+int	create_philo(t_data *data)
+{
+	int	i;
+
+	i = 1;
+	data->pid_philo = fork();
+
+	while (i < data->num_of_philo && data->pid_philo != 0)
+	{
+		data->pid_philo = fork();
+		i++;
+	}
+	if (data->pid_philo == 0)
+	{
+		printf("i'm a child process %d \n", data->pid_philo);
+		start_eating(data);
+	}
+	else
+	{
+		printf("i'm a parent %d \n", data->pid_philo);
+
+	}
+
+	return (0);
+}
+
 int	main(int argc, char **argv)
 {
 	t_data *data;
@@ -30,8 +56,8 @@ int	main(int argc, char **argv)
 	data = malloc(sizeof(t_data));
 	if (!data)
 		return (ft_error(2));
-	init_data(data, &argv);
-
+	init_data(data, argv);
+	create_philo(data);
 
 	return (0);
 }

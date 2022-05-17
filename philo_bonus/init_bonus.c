@@ -6,7 +6,7 @@
 /*   By: marlean <marlean@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/16 19:29:36 by marlean           #+#    #+#             */
-/*   Updated: 2022/05/16 19:34:14 by marlean          ###   ########.fr       */
+/*   Updated: 2022/05/17 11:17:32 by marlean          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,6 +56,18 @@ int	ph_atoi(const char *str)
 	return (res);
 }
 
+void	init_semaphores(t_data *data)
+{
+	sem_unlink("/sem_fork");
+	sem_unlink("/sem_print");
+	sem_unlink("/sem_eat");
+	sem_unlink("/sem_die");
+	sem_open("/sem_fork", O_CREAT, S_IRWXU, data->num_of_philo);
+	sem_open("/sem_print", O_CREAT, S_IRWXU, 1);
+	sem_open("/sem_eat", O_CREAT, S_IRWXU, 1);
+	sem_open("/sem_die", O_CREAT, S_IRWXU, 1);
+}
+
 int	init_data(t_data *data, char **argv)
 {
 	data->start_time = my_time();
@@ -74,5 +86,6 @@ int	init_data(t_data *data, char **argv)
 	if (data->num_of_philo <= 0 || data->time_to_die < 0
 		|| data->time_to_eat < 0 || data->time_to_sleep < 0)
 		return (ft_error(1));
+	init_semaphores(data);
 	return (0);
 }

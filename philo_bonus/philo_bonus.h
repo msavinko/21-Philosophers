@@ -6,7 +6,7 @@
 /*   By: marlean <marlean@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/16 18:35:26 by marlean           #+#    #+#             */
-/*   Updated: 2022/05/16 20:19:36 by marlean          ###   ########.fr       */
+/*   Updated: 2022/05/17 14:21:10 by marlean          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,18 +27,30 @@
 
 typedef struct s_data
 {
+	long long	start_time;
 	int			num_of_philo;
 	int			time_to_die;
 	int			time_to_eat;
 	int			time_to_sleep;
 	int			num_of_eat;
-	long long	start_time;
+	sem_t		*fork;
+	sem_t		*print;
+	sem_t		*eat;
+	sem_t		*die;
+	int			pid_philo;
 }	t_data;
 
-int	ph_atoi(const char *str);
-int	init_data(t_data *data, char **argv);
+long long	my_time(void);
+void		my_sleep(int ms);
+int			ph_atoi(const char *str);
+void		init_semaphores(t_data *data);
+int			init_data(t_data *data, char **argv);
 
 int	ft_error(int num);
+int	create_philo(t_data *data);
+
+void	start_eating(t_data *data);
+
 
 #endif
 
@@ -47,3 +59,5 @@ int	ft_error(int num);
 // sem_post, sem_wait, sem_unlink
 
 // API LINUX semaphores 969-973-982
+// ipcs to check opened semaphores
+// S_IRWXU  00700 user (file owner) has read, write and execute permission

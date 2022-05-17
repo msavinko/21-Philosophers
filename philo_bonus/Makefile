@@ -1,7 +1,9 @@
 NAME_PHB 	=	philo_bonus
 HEADER_PHB	=	philo_bonus.h
 
-SRCS_PHB		=	philo_bonus.c 
+SRCS_PHB		=	philo_bonus.c \
+					init_bonus.c \
+					action_bonus.c
 OBJS_PHB		=	$(SRCS_PHB:%.c=%.o)
 
 CC			=	cc
