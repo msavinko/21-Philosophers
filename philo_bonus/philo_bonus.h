@@ -6,7 +6,7 @@
 /*   By: marlean <marlean@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/16 18:35:26 by marlean           #+#    #+#             */
-/*   Updated: 2022/05/17 14:44:25 by marlean          ###   ########.fr       */
+/*   Updated: 2022/05/17 19:08:11 by marlean          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,7 @@
 # include <fcntl.h>
 # include <sys/stat.h>
 # include <semaphore.h>
+# include <signal.h>
 
 typedef struct s_data
 {
@@ -34,12 +35,13 @@ typedef struct s_data
 	int			time_to_eat;
 	int			time_to_sleep;
 	int			num_of_eat;
-	sem_t		*fork;
-	sem_t		*print;
-	sem_t		*eat;
-	sem_t		*die;
-	int			pid_philo;
+	sem_t		*semfork;
+	sem_t		*semprint;
+	sem_t		*semeat;
+	sem_t		*semdie;
+	int			*pid_philo;
 	int			ph_index;
+	int			i_eat;
 }	t_data;
 
 long long	my_time(void);
@@ -48,10 +50,12 @@ int			ph_atoi(const char *str);
 void		init_semaphores(t_data *data);
 int			init_data(t_data *data, char **argv);
 
-int	ft_error(int num);
-int	create_philo(t_data *data);
+int		ft_error(int num);
+void	print_b(t_data *data, char *str);
+void	start_action(t_data *data);
+void	monitoring(t_data *data);
+int		create_philo(t_data *data);
 
-void	start_eating(t_data *data);
 
 
 #endif
@@ -63,3 +67,4 @@ void	start_eating(t_data *data);
 // API LINUX semaphores 969-973-982
 // ipcs to check opened semaphores
 // S_IRWXU  00700 user (file owner) has read, write and execute permission
+// kwarpath proverka

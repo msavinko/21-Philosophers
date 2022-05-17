@@ -6,7 +6,7 @@
 /*   By: marlean <marlean@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/16 19:29:36 by marlean           #+#    #+#             */
-/*   Updated: 2022/05/17 14:27:27 by marlean          ###   ########.fr       */
+/*   Updated: 2022/05/17 20:01:36 by marlean          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,16 +62,17 @@ void	init_semaphores(t_data *data)
 	sem_unlink("/sem_print");
 	sem_unlink("/sem_eat");
 	sem_unlink("/sem_die");
-	sem_open("/sem_fork", O_CREAT, S_IRWXU, data->num_of_philo);
-	sem_open("/sem_print", O_CREAT, S_IRWXU, 1);
-	sem_open("/sem_eat", O_CREAT, S_IRWXU, 1);
-	sem_open("/sem_die", O_CREAT, S_IRWXU, 1);
+	data->semfork = sem_open("/sem_fork", O_CREAT, S_IRWXU, data->num_of_philo);
+	data->semprint = sem_open("/sem_print", O_CREAT, S_IRWXU, 1);
+	data->semeat = sem_open("/sem_eat", O_CREAT, S_IRWXU, 1);
+	data->semdie = sem_open("/sem_die", O_CREAT, S_IRWXU, 1);
 }
 
 int	init_data(t_data *data, char **argv)
 {
 	data->start_time = my_time();
 	data->now = my_time();
+	data->i_eat = 0;
 	data->num_of_philo = ph_atoi(argv[1]);
 	data->time_to_die = ph_atoi(argv[2]);
 	data->time_to_eat = ph_atoi(argv[3]);
@@ -87,6 +88,8 @@ int	init_data(t_data *data, char **argv)
 	if (data->num_of_philo <= 0 || data->time_to_die < 0
 		|| data->time_to_eat < 0 || data->time_to_sleep < 0)
 		return (ft_error(1));
+	data->pid_philo = malloc(sizeof(int) * data->num_of_philo);
+	// memset(data->pid_philo, 0, sizeof(int) * data->num_of_philo);
 	init_semaphores(data);
 	return (0);
 }
