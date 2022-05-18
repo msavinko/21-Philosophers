@@ -6,7 +6,7 @@
 /*   By: marlean <marlean@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/16 18:35:26 by marlean           #+#    #+#             */
-/*   Updated: 2022/05/18 14:32:53 by marlean          ###   ########.fr       */
+/*   Updated: 2022/05/18 16:16:32 by marlean          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,6 +43,7 @@ typedef struct s_data
 	int			*pid_philo;
 	int			ph_index;
 	int			i_eat;
+	pthread_t	pthread_id;
 }	t_data;
 
 long long	my_time(void);
@@ -51,11 +52,15 @@ int			ph_atoi(const char *str);
 void		init_semaphores(t_data *data);
 int			init_data(t_data *data, char **argv);
 
-int		ft_error(int num);
-void	print_b(t_data *data, char *str);
-void	start_action(t_data *data);
-int		create_philo(t_data *data);
-void	monitoring(t_data *data) ;
+int			ft_error(int num);
+void		print_b(t_data *data, char *str);
+void		parent_control(t_data *data);
+int			create_philo(t_data *data);
+
+void		count_eat(t_data *data);
+void		*monitor_death(void *data_in);
+int			create_monitor(t_data *data);
+void		start_action(t_data *data);
 
 
 

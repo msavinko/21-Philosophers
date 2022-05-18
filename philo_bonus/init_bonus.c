@@ -6,7 +6,7 @@
 /*   By: marlean <marlean@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/16 19:29:36 by marlean           #+#    #+#             */
-/*   Updated: 2022/05/18 14:33:08 by marlean          ###   ########.fr       */
+/*   Updated: 2022/05/18 16:34:46 by marlean          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,7 +65,7 @@ void	init_semaphores(t_data *data)
 	data->semfork = sem_open("/sem_fork", O_CREAT, S_IRWXU, data->num_of_philo);
 	data->semprint = sem_open("/sem_print", O_CREAT, S_IRWXU, 1);
 	data->semeat = sem_open("/sem_eat", O_CREAT, S_IRWXU, 1);
-	data->semdie = sem_open("/sem_die", O_CREAT, S_IRWXU, 1);
+	data->semdie = sem_open("/sem_die", O_CREAT, S_IRWXU, 0);
 }
 
 int	init_data(t_data *data, char **argv)
@@ -93,6 +93,7 @@ int	init_data(t_data *data, char **argv)
 	if (!data->pid_philo)
 		return (ft_error(2));
 	memset(data->pid_philo, 0, sizeof(int) * data->num_of_philo);
+	data->pthread_id = 0;
 	init_semaphores(data);
 	return (0);
 }

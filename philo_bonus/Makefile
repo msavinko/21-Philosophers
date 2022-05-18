@@ -3,7 +3,7 @@ HEADER_PHB	=	philo_bonus.h
 
 SRCS_PHB		=	philo_bonus.c \
 					init_bonus.c \
-
+					child_bonus.c
 OBJS_PHB		=	$(SRCS_PHB:%.c=%.o)
 
 CC			=	cc
