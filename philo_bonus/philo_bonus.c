@@ -6,7 +6,7 @@
 /*   By: marlean <marlean@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/16 18:37:24 by marlean           #+#    #+#             */
-/*   Updated: 2022/05/17 20:12:54 by marlean          ###   ########.fr       */
+/*   Updated: 2022/05/18 14:34:21 by marlean          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,8 @@ int	ft_error(int num)
 		write(1, "Wrong arguments\n", 16);
 	else if (num == 2)
 		write(1, "Malloc error\n", 13);
+	else if (num == 3)
+		write(1, "Child error\n", 23);
 	return (1);
 }
 
@@ -36,16 +38,18 @@ void	count_eat(t_data *data)
 		sem_post(data->semeat);
 }
 
-void	start_action(t_data *data)
+void	start_action(t_data *data) // only child processes
 {
 	if (data->ph_index % 2 == 0)
 		usleep(500);
 	while (1)
-	{	sem_wait(data->semfork);
+	{
+		sem_wait(data->semfork);
 		print_b(data, "has taken a fork");
 		sem_wait(data->semfork);
 		print_b(data, "has taken a fork");
 		print_b(data, "is eating");
+		data->last_eat = my_time();
 		my_sleep(data->time_to_eat);
 		if (data->num_of_eat)
 			count_eat(data);
@@ -54,66 +58,54 @@ void	start_action(t_data *data)
 		print_b(data, "is sleeping");
 		my_sleep(data->time_to_sleep);
 		print_b(data, "is thinking");
-
 	}
 
 }
 
-void	monitoring(t_data *data)
+void	monitoring(t_data *data) //only parent process goes here
 {
-	int	i;
-
-	i = 0;
-	while (1)
+	if (data->num_of_eat)
 	{
-		sem_wait(data->semeat);
-		
-		// kill(data->pid_philo[i], SIGKILL);
-		// sem_wait(data->semdie);
-		i++;
+
+	}
+	else
+	{
+		int	i;
+
+		i = 0;
+		sem_wait(data->semdie);
+		while (i < data->num_of_philo)
+		{
+			kill(data->pid_philo[i], SIGKILL);
+			i++;
+		}
 	}
 }
+
 
 int	create_philo(t_data *data)
 {
 	int	i;
 
 	i = 0;
-	// data->pid_philo[0] = fork();
-	// data->ph_index = i;
-	// printf("ONE %d index and PID: %d\n", data->ph_index, data->pid_philo[0]);
-
-	while (i < data->num_of_philo) // && data->pid_philo[i] != 0)
+	data->pid_philo[0] = 1;
+	while (i < data->num_of_philo && data->pid_philo[i - 1] != 0)
 	{
-		data->ph_index = i + 1;
 		data->pid_philo[i] = fork();
-		if (data->pid_philo[i] != 0)
+		data->ph_index = i + 1;
+		if (data->pid_philo[i] == 0) // child process
 		{
-			printf("PARENT %d index and PID: %d\n", data->ph_index, data->pid_philo[i]);
-			
-		}
-		else
-		{
-			printf("CHILD %d index and PID: %d\n", data->ph_index, data->pid_philo[i]);
+			start_action(data);
 
+		}
+		else if (data->pid_philo[i] == -1)
+		{
+			while (--i >- 0)
+				kill(data->pid_philo[i], SIGKILL);
+			return (1);
 		}
 		i++;
 	}
-
-		// printf("FINAL %d index and PID: %d\n", data->ph_index, data->pid_philo);
-
-		// if (data->pid_philo == 0)
-		// {
-
-		// 	start_action(data);
-		// }
-		// else
-		// {
-
-		// 	monitoring(data);
-		// }
-		// i++;
-	
 	return (0);
 }
 
@@ -126,8 +118,10 @@ int	main(int argc, char **argv)
 	data = malloc(sizeof(t_data));
 	if (!data)
 		return (ft_error(2));
-	init_data(data, argv);
-	create_philo(data);
-
+	if (init_data(data, argv))
+		return(1);
+	if (create_philo(data))
+		return (ft_error(3));
+	monitoring(data);
 	return (0);
 }

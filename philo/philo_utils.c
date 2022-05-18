@@ -6,7 +6,7 @@
 /*   By: marlean <marlean@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/12 10:43:36 by marlean           #+#    #+#             */
-/*   Updated: 2022/05/16 12:06:26 by marlean          ###   ########.fr       */
+/*   Updated: 2022/05/18 14:29:29 by marlean          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,15 +14,6 @@
 
 int	burn_them_all(t_data *data)
 {
-	int	i;
-
-	i = 0;
-	while (i < data->num_of_philo)
-	{
-		pthread_mutex_destroy(&data->forks[i]);
-		i++;
-	}
-	pthread_mutex_destroy(&data->my_mutex);
 	if (data->forks)
 		free(data->forks);
 	if (data->philo)

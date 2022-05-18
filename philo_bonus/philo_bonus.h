@@ -6,7 +6,7 @@
 /*   By: marlean <marlean@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/16 18:35:26 by marlean           #+#    #+#             */
-/*   Updated: 2022/05/17 19:08:11 by marlean          ###   ########.fr       */
+/*   Updated: 2022/05/18 14:32:53 by marlean          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,6 +30,7 @@ typedef struct s_data
 {
 	long long	start_time;
 	long long	now;
+	long long	last_eat;
 	int			num_of_philo;
 	int			time_to_die;
 	int			time_to_eat;
@@ -53,8 +54,8 @@ int			init_data(t_data *data, char **argv);
 int		ft_error(int num);
 void	print_b(t_data *data, char *str);
 void	start_action(t_data *data);
-void	monitoring(t_data *data);
 int		create_philo(t_data *data);
+void	monitoring(t_data *data) ;
 
 
 
