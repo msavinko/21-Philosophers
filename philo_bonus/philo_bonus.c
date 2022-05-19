@@ -6,50 +6,50 @@
 /*   By: marlean <marlean@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/16 18:37:24 by marlean           #+#    #+#             */
-/*   Updated: 2022/05/19 10:41:00 by marlean          ###   ########.fr       */
+/*   Updated: 2022/05/19 16:49:21 by marlean          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo_bonus.h"
 
-int	ft_error(int num)
+void	*par_check_eat(void *data_in)
 {
-	if (num == 1)
-		write(1, "Wrong arguments\n", 16);
-	else if (num == 2)
-		write(1, "Malloc error\n", 13);
-	else if (num == 3)
-		write(1, "Child error\n", 23);
-	else if (num == 4)
-		write(1, "Pthread error\n", 14);
-	return (1);
+	t_data	*data;
+	int		i;
+
+	i = 0;
+	data = (t_data *)data_in;
+	sem_wait(data->sem);
+	while (i < data->num_of_philo)
+	{
+		sem_post(data->sem);
+		sem_wait(data->semeat);
+		sem_wait(data->sem);
+		i++;
+	}
+	sem_post(data->semdie);
+	return (NULL);
 }
 
-void	print_b(t_data *data, char *str)
-{
-	sem_wait(data->semprint);
-	data->now = my_time() - data->start_time;
-	printf("%lld %d %s\n", data->now, data->ph_index, str);
-	sem_post(data->semprint);
-}
-
-void	parent_control(t_data *data)
+int	parent_control(t_data *data)
 {
 	int	i;
 
 	i = 0;
 	if (data->num_of_eat)
 	{
+		if (pthread_create(&data->pthread_id, NULL, &par_check_eat, data) != 0)
+			return (ft_error(4));
+		if (pthread_detach(data->pthread_id) != 0)
+			return (ft_error(4));
 	}
-	else
+	sem_wait(data->semdie);
+	while (i < data->num_of_philo)
 	{
-		sem_wait(data->semdie);
-		while (i < data->num_of_philo)
-		{
-			kill(data->pid_philo[i], SIGKILL);
-			i++;
-		}
+		kill(data->pid_philo[i], SIGKILL);
+		i++;
 	}
+	return (0);
 }
 
 int	create_philo(t_data *data)
@@ -57,28 +57,22 @@ int	create_philo(t_data *data)
 	int	i;
 
 	i = 0;
-	data->pid_philo[i] = 1;
-	while (i < data->num_of_philo)// && data->pid_philo[i] != 0)
+	data->start_time = my_time();
+	while (i < data->num_of_philo)
 	{
-		if (data->pid_philo[i] != 0)
+		data->ph_index = i + 1;
+		data->pid_philo[i] = fork();
+		if (data->pid_philo[i] == 0)
 		{
-			data->pid_philo[i] = fork();
-			data->ph_index = i + 1;
-			if (data->pid_philo[i] == 0)
-			{
-				printf("ph_index: %d\n", data->ph_index);
-				printf("im child\n");
-				while(1){}
-				// if (create_monitor(data))
-				// 	return (1);
-				// start_action(data);
-			}
-			else if (data->pid_philo[i] == -1)
-			{
-				while (--i >= 0)
-					kill(data->pid_philo[i], SIGKILL);
+			if (create_monitor(data))
 				return (1);
-			}
+			start_action(data);
+		}
+		else if (data->pid_philo[i] == -1)
+		{
+			while (--i >= 0)
+				kill(data->pid_philo[i], SIGKILL);
+			return (1);
 		}
 		i++;
 	}
@@ -98,7 +92,7 @@ int	main(int argc, char **argv)
 		return (1);
 	if (create_philo(data))
 		return (ft_error(3));
-	printf("im parent\n");
-	parent_control(data);
+	if (parent_control(data))
+		return (1);
 	return (0);
 }

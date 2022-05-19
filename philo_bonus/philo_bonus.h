@@ -6,7 +6,7 @@
 /*   By: marlean <marlean@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/16 18:35:26 by marlean           #+#    #+#             */
-/*   Updated: 2022/05/19 10:19:29 by marlean          ###   ########.fr       */
+/*   Updated: 2022/05/19 16:49:24 by marlean          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,6 @@
 typedef struct s_data
 {
 	long long	start_time;
-	long long	now;
 	long long	last_eat;
 	int			num_of_philo;
 	int			time_to_die;
@@ -37,13 +36,14 @@ typedef struct s_data
 	int			time_to_sleep;
 	int			num_of_eat;
 	sem_t		*semfork;
-	sem_t		*semprint;
-	sem_t		*semlasteat;
+	sem_t		*sem;
 	sem_t		*semdie;
+	sem_t		*semeat;
 	int			*pid_philo;
 	int			ph_index;
 	int			i_eat;
 	pthread_t	pthread_id;
+	pthread_t	check_id;
 }	t_data;
 
 long long	my_time(void);
@@ -54,7 +54,7 @@ int			init_data(t_data *data, char **argv);
 
 int			ft_error(int num);
 void		print_b(t_data *data, char *str);
-void		parent_control(t_data *data);
+int			parent_control(t_data *data);
 int			create_philo(t_data *data);
 
 void		count_eat(t_data *data);
