@@ -6,7 +6,7 @@
 /*   By: marlean <marlean@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/16 18:37:24 by marlean           #+#    #+#             */
-/*   Updated: 2022/05/18 16:36:10 by marlean          ###   ########.fr       */
+/*   Updated: 2022/05/19 10:41:00 by marlean          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,17 +33,16 @@ void	print_b(t_data *data, char *str)
 	sem_post(data->semprint);
 }
 
-void	parent_control(t_data *data) //only parent process goes here
+void	parent_control(t_data *data)
 {
+	int	i;
+
+	i = 0;
 	if (data->num_of_eat)
 	{
-		//count and check eating
 	}
 	else
 	{
-		int	i;
-
-		i = 0;
 		sem_wait(data->semdie);
 		while (i < data->num_of_philo)
 		{
@@ -58,22 +57,28 @@ int	create_philo(t_data *data)
 	int	i;
 
 	i = 0;
-	data->pid_philo[0] = 1;
-	while (i < data->num_of_philo && data->pid_philo[i - 1] != 0)
+	data->pid_philo[i] = 1;
+	while (i < data->num_of_philo)// && data->pid_philo[i] != 0)
 	{
-		data->pid_philo[i] = fork();
-		data->ph_index = i + 1;
-		if (data->pid_philo[i] == 0) // child process
+		if (data->pid_philo[i] != 0)
 		{
-			if (create_monitor(data))
+			data->pid_philo[i] = fork();
+			data->ph_index = i + 1;
+			if (data->pid_philo[i] == 0)
+			{
+				printf("ph_index: %d\n", data->ph_index);
+				printf("im child\n");
+				while(1){}
+				// if (create_monitor(data))
+				// 	return (1);
+				// start_action(data);
+			}
+			else if (data->pid_philo[i] == -1)
+			{
+				while (--i >= 0)
+					kill(data->pid_philo[i], SIGKILL);
 				return (1);
-			start_action(data);
-		}
-		else if (data->pid_philo[i] == -1)
-		{
-			while (--i >- 0)
-				kill(data->pid_philo[i], SIGKILL);
-			return (1);
+			}
 		}
 		i++;
 	}
@@ -82,7 +87,7 @@ int	create_philo(t_data *data)
 
 int	main(int argc, char **argv)
 {
-	t_data *data;
+	t_data	*data;
 
 	if (argc != 5 && argc != 6)
 		return (ft_error(1));
@@ -90,9 +95,10 @@ int	main(int argc, char **argv)
 	if (!data)
 		return (ft_error(2));
 	if (init_data(data, argv))
-		return(1);
+		return (1);
 	if (create_philo(data))
 		return (ft_error(3));
+	printf("im parent\n");
 	parent_control(data);
 	return (0);
 }

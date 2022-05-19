@@ -6,7 +6,7 @@
 /*   By: marlean <marlean@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/16 18:35:26 by marlean           #+#    #+#             */
-/*   Updated: 2022/05/18 16:16:32 by marlean          ###   ########.fr       */
+/*   Updated: 2022/05/19 10:19:29 by marlean          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,7 @@ typedef struct s_data
 	int			num_of_eat;
 	sem_t		*semfork;
 	sem_t		*semprint;
-	sem_t		*semeat;
+	sem_t		*semlasteat;
 	sem_t		*semdie;
 	int			*pid_philo;
 	int			ph_index;
@@ -62,15 +62,11 @@ void		*monitor_death(void *data_in);
 int			create_monitor(t_data *data);
 void		start_action(t_data *data);
 
-
-
 #endif
 
-// waitpid Функция waitpid приостанавливает выполнение текущего процесса до тех пор, пока дочерний процесс, указанный в параметре pid, не завершит выполнение, или пока не появится сигнал, который либо завершает текущий процесс либо требует вызвать функцию-обработчик
 // sem_open, sem_close,
 // sem_post, sem_wait, sem_unlink
 
 // API LINUX semaphores 969-973-982
 // ipcs to check opened semaphores
 // S_IRWXU  00700 user (file owner) has read, write and execute permission
-// kwarpath proverka

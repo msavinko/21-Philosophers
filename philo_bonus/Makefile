@@ -7,7 +7,7 @@ SRCS_PHB		=	philo_bonus.c \
 OBJS_PHB		=	$(SRCS_PHB:%.c=%.o)
 
 CC			=	cc
-CFLAGS		=	-Wall -Wextra -Werror #-fsanitize=thread #DONT FORGET TO REMOVE THIS FLAG
+CFLAGS		=	-Wall -Wextra -Werror -fsanitize=thread #DONT FORGET TO REMOVE THIS FLAG
 RM			=	rm -f
 
 .PHONY		:	all clean fclean re

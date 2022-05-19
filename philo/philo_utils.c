@@ -6,7 +6,7 @@
 /*   By: marlean <marlean@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/12 10:43:36 by marlean           #+#    #+#             */
-/*   Updated: 2022/05/18 14:29:29 by marlean          ###   ########.fr       */
+/*   Updated: 2022/05/19 09:14:11 by marlean          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,11 +51,9 @@ int	ft_error(int num)
 long long	my_time(void)
 {
 	struct timeval	tv;
-	long long		current_time;
 
 	gettimeofday(&tv, NULL);
-	current_time = tv.tv_sec * 1000 + tv.tv_usec / 1000;
-	return (current_time);
+	return ((tv.tv_sec * 1000) + (tv.tv_usec / 1000));
 }
 
 void	my_sleep(int ms)
