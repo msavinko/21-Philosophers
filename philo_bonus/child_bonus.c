@@ -6,7 +6,7 @@
 /*   By: marlean <marlean@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/18 15:55:04 by marlean           #+#    #+#             */
-/*   Updated: 2022/05/19 16:48:52 by marlean          ###   ########.fr       */
+/*   Updated: 2022/05/20 16:43:29 by marlean          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,35 +39,33 @@ void	*monitor_death(void *data_in)
 {
 	t_data		*data;
 	long long	now;
+	long long	time_diff;
 
 	data = (t_data *)data_in;
 	while (1)
 	{
 		now = my_time();
-		if (now - data->last_eat > data->time_to_die)
+		sem_wait(data->semlasteat);
+		time_diff = now - data->last_eat;
+		sem_post(data->semlasteat);
+		
+		if (time_diff > data->time_to_die)
 		{
 			sem_wait(data->sem);
 			now = my_time() - data->start_time;
 			printf("%lld %d died\n", now, data->ph_index);
 			sem_post(data->semdie);
-			exit(0);
+			return (0);
 		}
 	}
 	return (NULL);
 }
 
-int	create_monitor(t_data *data)
-{
-	data->last_eat = my_time();
-	if (pthread_create(&data->pthread_id, NULL, &monitor_death, data) != 0)
-		return (ft_error(4));
-	if (pthread_detach(data->pthread_id) != 0)
-		return (ft_error(4));
-	return (0);
-}
-
 void	start_action(t_data *data)
 {
+	data->last_eat = my_time();
+	pthread_create(&data->pthread_id, NULL, &monitor_death, data);
+	pthread_detach(data->pthread_id);
 	while (1)
 	{
 		sem_wait(data->semfork);
@@ -75,7 +73,12 @@ void	start_action(t_data *data)
 		sem_wait(data->semfork);
 		print_b(data, "has taken a fork");
 		print_b(data, "is eating");
+
+		sem_wait(data->semlasteat);
 		data->last_eat = my_time();
+		sem_post(data->semlasteat);
+
+
 		my_sleep(data->time_to_eat);
 		data->i_eat++;
 		if (data->i_eat == data->num_of_eat)

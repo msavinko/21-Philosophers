@@ -6,7 +6,7 @@
 /*   By: marlean <marlean@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/16 18:35:26 by marlean           #+#    #+#             */
-/*   Updated: 2022/05/19 16:49:24 by marlean          ###   ########.fr       */
+/*   Updated: 2022/05/20 16:42:45 by marlean          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,6 +39,7 @@ typedef struct s_data
 	sem_t		*sem;
 	sem_t		*semdie;
 	sem_t		*semeat;
+	sem_t		*semlasteat;
 	int			*pid_philo;
 	int			ph_index;
 	int			i_eat;
@@ -59,14 +60,6 @@ int			create_philo(t_data *data);
 
 void		count_eat(t_data *data);
 void		*monitor_death(void *data_in);
-int			create_monitor(t_data *data);
 void		start_action(t_data *data);
 
 #endif
-
-// sem_open, sem_close,
-// sem_post, sem_wait, sem_unlink
-
-// API LINUX semaphores 969-973-982
-// ipcs to check opened semaphores
-// S_IRWXU  00700 user (file owner) has read, write and execute permission

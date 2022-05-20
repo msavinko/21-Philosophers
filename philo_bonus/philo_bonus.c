@@ -6,7 +6,7 @@
 /*   By: marlean <marlean@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/16 18:37:24 by marlean           #+#    #+#             */
-/*   Updated: 2022/05/19 16:49:21 by marlean          ###   ########.fr       */
+/*   Updated: 2022/05/20 12:53:44 by marlean          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,24 @@ void	*par_check_eat(void *data_in)
 	}
 	sem_post(data->semdie);
 	return (NULL);
+}
+
+void	finish_sem(t_data *data)
+{
+	sem_post(data->semeat);
+	sem_close(data->semeat);
+	sem_close(data->semfork);
+	sem_post(data->sem);
+	sem_close(data->sem);
+	sem_close(data->semdie);
+	sem_unlink("/sem_fork");
+	sem_unlink("/sem");
+	sem_unlink("/sem_die");
+	sem_unlink("/sem_eat");
+	if (data->pid_philo)
+		free(data->pid_philo);
+	if (data)
+		free(data);
 }
 
 int	parent_control(t_data *data)
@@ -63,17 +81,7 @@ int	create_philo(t_data *data)
 		data->ph_index = i + 1;
 		data->pid_philo[i] = fork();
 		if (data->pid_philo[i] == 0)
-		{
-			if (create_monitor(data))
-				return (1);
 			start_action(data);
-		}
-		else if (data->pid_philo[i] == -1)
-		{
-			while (--i >= 0)
-				kill(data->pid_philo[i], SIGKILL);
-			return (1);
-		}
 		i++;
 	}
 	return (0);
@@ -94,5 +102,6 @@ int	main(int argc, char **argv)
 		return (ft_error(3));
 	if (parent_control(data))
 		return (1);
+	finish_sem(data);
 	return (0);
 }
