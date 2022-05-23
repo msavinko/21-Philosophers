@@ -6,7 +6,7 @@
 /*   By: marlean <marlean@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/18 15:55:04 by marlean           #+#    #+#             */
-/*   Updated: 2022/05/20 16:43:29 by marlean          ###   ########.fr       */
+/*   Updated: 2022/05/23 10:55:21 by marlean          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,6 @@ void	*monitor_death(void *data_in)
 		sem_wait(data->semlasteat);
 		time_diff = now - data->last_eat;
 		sem_post(data->semlasteat);
-		
 		if (time_diff > data->time_to_die)
 		{
 			sem_wait(data->sem);
@@ -73,12 +72,9 @@ void	start_action(t_data *data)
 		sem_wait(data->semfork);
 		print_b(data, "has taken a fork");
 		print_b(data, "is eating");
-
 		sem_wait(data->semlasteat);
 		data->last_eat = my_time();
 		sem_post(data->semlasteat);
-
-
 		my_sleep(data->time_to_eat);
 		data->i_eat++;
 		if (data->i_eat == data->num_of_eat)
